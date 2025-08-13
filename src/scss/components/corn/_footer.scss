@@ -1,0 +1,25 @@
+.gifs {
+  position: relative;
+  margin: 0 auto;
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+
+  display: flex;
+  justify-content: space-between;
+
+  &__caption {
+    font-size: 20px;
+    text-align: center;
+  }
+  &__wrapper {
+    flex-basis: 30%;
+  }
+  &__img {
+    border-radius: 10px;
+    margin-bottom: 20px;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+  }
+}

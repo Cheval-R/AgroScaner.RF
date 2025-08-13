@@ -1,0 +1,17 @@
+@use "./var";
+
+@font-face {
+  @include var.font(ProximaNova, 300);
+}
+
+@font-face {
+  @include var.font(ProximaNova, 400);
+}
+
+@font-face {
+  @include var.font(ProximaNova, 700);
+}
+
+// @font-face {
+//   @include var.font(Epilogue, 900);
+// }

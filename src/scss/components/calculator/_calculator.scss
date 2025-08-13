@@ -1,0 +1,391 @@
+// ! Clients
+
+.clients {
+  margin-bottom: 20px;
+  &__list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 5px;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+    // flex-wrap: wrap;
+    gap: 5px;
+  }
+  &__item {
+    text-align: center;
+    // display: flex;
+    // align-items: stretch;
+
+    @media (max-width: 600px) {
+      font-size: clamp(12px, 2.7vw, 16px);
+    }
+  }
+  &__link {
+    display: block;
+    // padding: 2px 5px;
+  }
+}
+
+// ! Information
+
+.information {
+  display: flex;
+  margin-bottom: 20px;
+  &__wrapper {
+    display: grid;
+    gap: 15px;
+    justify-content: space-between;
+    grid-template-areas:
+      "gradation fertilizer"
+      "field field";
+  }
+  &__table {
+    padding: 5px;
+    text-align: center;
+
+    // border-radius: 5px;
+    // // width: 100%;
+    // background-color: #fff;
+    // margin: 0 auto;
+    // border: 1px solid #4c594f;
+
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+    border-radius: 10px;
+    border-spacing: 0;
+    line-height: 1.6;
+
+    & td input,
+    & td select {
+      width: 90%;
+    }
+
+    & tbody tr:last-child {
+      & td:last-child {
+        border-bottom-right-radius: 10px;
+      }
+      & td:first-child {
+        border-bottom-left-radius: 10px;
+      }
+    }
+  }
+}
+.gradation {
+  grid-area: gradation;
+
+  &__low {
+    background-color: #ee8138;
+  }
+  &__optimal {
+    background-color: #8dbd6c;
+  }
+  &__high {
+    background-color: #ffc411;
+  }
+}
+.field-info {
+  grid-area: field;
+}
+.fertilizer {
+  grid-area: fertilizer;
+}
+
+// ! Calculator
+
+.calculator__header {
+  font-size: 16px;
+  margin: 0;
+  background-color: #efefef;
+
+  border-bottom: 1px solid #dddddd;
+
+  padding: 2px;
+  text-align: center;
+  flex-basis: 100%;
+
+  &--title {
+    grid-area: title;
+  }
+
+  &--main {
+    background-color: #c2c2c2;
+    grid-area: main;
+  }
+
+  &--ga {
+    grid-area: main-ga;
+  }
+
+  &--field {
+    grid-area: main-field;
+  }
+}
+
+.result-column {
+  display: grid;
+  grid-template-areas:
+    "title title"
+    "phys price";
+  grid-template-columns: repeat(2, auto);
+  grid-template-rows: min-content 1fr;
+  &--total {
+    grid-template-areas:
+      "title"
+      "price";
+    grid-template-columns: 1fr;
+  }
+
+  &:not(:last-child) {
+    border-right: 1px solid rgb(161, 161, 161);
+  }
+
+  & p {
+    padding: 0 3px;
+  }
+
+  &__phys {
+    grid-area: phys;
+    display: grid;
+    grid-template-areas:
+      "main"
+      "main-ga"
+      "ga"
+      "main-field"
+      "field";
+    border-right: 1px solid #dddddd;
+
+    grid-template-rows: min-content min-content auto min-content auto;
+  }
+
+  &__price {
+    grid-area: price;
+    display: grid;
+    grid-template-areas:
+      "main"
+      "main-ga"
+      "ga"
+      "main-field"
+      "field";
+
+    grid-template-rows: min-content min-content auto min-content auto;
+  }
+
+  &__answer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+.calculator {
+  margin-bottom: 20px;
+
+  &__table {
+    display: grid;
+
+    grid-template-columns: repeat(4, auto);
+    margin-bottom: 15px;
+
+    position: relative;
+    margin: 0 auto;
+    background: rgba(255, 255, 255, 0.8);
+    // border: 1px solid rgb(161, 161, 161);
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+    padding: 5px;
+    margin-bottom: 20px;
+    text-align: center;
+
+    p,
+    h2,
+    h3 {
+      line-height: 2;
+    }
+  }
+  &__button {
+    display: block;
+    font-size: 16px;
+    text-transform: uppercase;
+    // line-height: 2;
+    margin: 0 auto;
+    text-align: center;
+    padding: 10px 25px;
+    width: 50%;
+  }
+}
+
+.return-link {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+}
+
+// ! Media
+
+@media (max-width: 1000px) {
+  body,
+  input,
+  select,
+  .calculator__header {
+    font-size: clamp(12px, 1.4vw, 14px);
+  }
+
+  .region-button {
+    font-size: clamp(14px, 2vw, 20px);
+  }
+
+  .input-column {
+    grid-template-columns: max-content repeat(2, clamp(45px, 7vw, 75px));
+  }
+
+  .main-page .input-column {
+    grid-template-columns: repeat(6, 31px);
+  }
+
+  .fertilizer__price h2 {
+    font-size: clamp(14px, 2.8vw, 28px);
+    margin-bottom: 15px;
+  }
+}
+
+@media (max-width: 750px) {
+  // body,
+  input,
+  select,
+  .information__table,
+  .calculator__header {
+    font-size: clamp(10px, 1.6vw, 12px);
+  }
+
+  .main-page .input-column {
+    grid-template-columns: repeat(6, 26px);
+  }
+  .fertilizer__wrapper label {
+    gap: 0;
+  }
+}
+
+@media (max-width: 650px) {
+  body,
+  .calculator__header {
+    font-size: clamp(11px, 2vw, 14px);
+  }
+
+  .companies__links {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .information__wrapper {
+    grid-template-areas: "gradation" "fertilizer" "field";
+  }
+
+  .information__table {
+    line-height: 1.5;
+  }
+
+  .region-button {
+    font-size: clamp(11px, 2vw, 14px);
+    padding: 5px 10px;
+    border-radius: 7px;
+  }
+  .return-link {
+    font-size: 10px;
+    padding: 2px 5px;
+  }
+  .page-title {
+    font-size: clamp(16px, 3.38vw, 22px);
+  }
+  .calculator {
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(5, auto);
+
+    &__table {
+      grid-template-columns: 1fr;
+      grid-template-rows: repeat(4, 1fr);
+    }
+    &__table p,
+    &__table h2,
+    &__table h3 {
+      line-height: 1.2;
+    }
+  }
+
+  .result-column {
+    grid-template-columns: min-content repeat(2, 1fr);
+    grid-template-rows: 1fr;
+    grid-template-areas: "title phys price";
+
+    &--total {
+      grid-template-areas: "title price";
+      grid-template-columns: min-content auto;
+    }
+
+    &__phys,
+    &__price {
+      grid-template-rows: repeat(3, 1fr);
+      grid-template-areas:
+        "main main"
+        "main-ga main-field"
+        "ga field";
+    }
+  }
+
+  .input-column input {
+    height: 25px;
+  }
+  .input-column {
+    grid-template-areas:
+      "name area harvest"
+      "crop crop crop"
+      "nitro phos pottas"
+      /* "crop crop crop" */
+      /* "nitro nitro nitro"
+      "phos phos phos"
+      "pottas pottas pottas"; */;
+    grid-template-columns: repeat(3, 1fr);
+    width: 100%;
+  }
+
+  .main-page .input-column {
+    grid-template-areas:
+      "n-value p-value k-value"
+      "area harvest crop"
+      "nitro phos pottas";
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    width: 100%;
+  }
+
+  .calculator__header {
+    padding: 3px 2px;
+    // font-size: 11px;
+
+    &--title {
+      writing-mode: vertical-rl;
+      rotate: 180deg;
+      padding: 3px 5px;
+    }
+  }
+
+  p {
+    margin-block-start: 0 !important;
+    margin-block-end: 0 !important;
+  }
+}
+
+@media (max-width: 450px) {
+  .information__table,
+  select,
+  input {
+    font-size: clamp(9px, 1.6vw, 12px);
+  }
+}

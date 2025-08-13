@@ -1,0 +1,15 @@
+$opacity: #ffffff00;
+
+@mixin font($name, $weight) {
+  font: {
+    family: $name;
+    weight: $weight;
+    font-style: normal;
+    display: fallback;
+  }
+  src:
+    url("./../fonts/#{ $name }-#{ $weight }.woff2") format("woff2"),
+    url("./../fonts/#{ $name }-#{ $weight }.woff") format("woff"),
+    url("./../fonts/#{ $name }-#{ $weight }.ttf") format("truetype"),
+    url("./../fonts/#{ $name }-#{ $weight }.eot") format("embedded-opentype");
+}
