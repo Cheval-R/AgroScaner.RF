@@ -1,53 +1,117 @@
+// const { Chart } = await import('chart.js');
 import Chart from 'chart.js/auto';
 import { chartObj } from './main.js';
 
+const tempGraph = document.getElementById('graph');
+
 export function PrintGraph(data) {
   console.log('data', data)
-  const newData = RemoveRepeatingGroups(data, 5);
+  const graphData = RemoveYear(RemoveRepeatingGroups(data, 5));
+
   if (chartObj.chart) {
     chartObj.chart.destroy();
   }
-  console.log('newData', newData)
-  chartObj.chart = new Chart(document.getElementById('graph'), CreateChartConfig(newData));
+
+  const todayIndex = graphData.date.findIndex((element) => element === getFormattedToday());
+
+  new Chart
+    (
+      tempGraph,
+      {
+        type: 'line',
+        options: {
+          plugins: {
+            legend: { display: false },
+          }
+        },
+        data: {
+          labels: graphData.date,
+          datasets: [{
+            label: 'Значения суммы эффективных температур',
+            data: graphData.temp,
+            pointBorderColor: '#ffa500',
+            pointBackgroundColor: '#ffa500',
+            tension: 0.1,
+            // Добавить условие выхода сегодняшнего индекса за рамки массива, потому что он может быть удален зимой из-за повторов
+            segment: {
+              borderColor: (ctx) => ctx.p0DataIndex > todayIndex ? '#008000' : '#ffa500',
+              backgroundColor: (ctx) => ctx.p0DataIndex > todayIndex ? '#008000' : '#ffa500',
+            },
+            pointBorderColor: (ctx) => ctx.dataIndex > todayIndex ? '#008000' : '#ffa500',
+            pointBackgroundColor: (ctx) => ctx.dataIndex > todayIndex ? '#008000' : '#ffa500'
+          }]
+        },
+        plugins: [OptimalHarvestingTimingPlugin(), CustomLegendPlugin(graphData, todayIndex)],
+      }
+    )
 }
-
-function DeleteZeroFromStart(data) {
-  let temp = data.temp.filter(item => item !== 0);
-  let differenceDays = data.temp.length - temp.length;
-  let date = data.date.slice(differenceDays);
-  return { temp, date }
-}
-
-function RemoveRepeatingGroups(data, limit = 10) {
-  let { temp, date } = DeleteZeroFromStart(data);
-  const tempLengthAfterZero = temp.length;
-
-  while (true) {
-    let lastValue = temp[temp.length - 1];
-    let count = 0;
-    let i = temp.length - 1;
-
-    while (i >= 0 && temp[i] === lastValue) {
-      count++;
-      i--;
-    }
-
-    if (count > limit) {
-      temp = temp.filter(value => value !== lastValue);
-    } else {
-      break;
-    }
-  }
-
-  let differenceDays = tempLengthAfterZero - temp.length;
-  date = date.slice(0, date.length - differenceDays);
-
-  return { temp, date };
-}
-
-function CreateBoxPlugin() {
+function CustomLegendPlugin(graphData, todayIndex) {
   return {
-    id: 'boxPlugin',
+    id: 'customLegend',
+    afterDraw: (chart) => {
+      const ctx = chart.ctx;
+
+      // Стили для легенды
+      const segmentStyles = [
+        {
+          label: `Фактические значения суммы эффективных температур`,
+          additionalText: `${graphData?.temp?.[todayIndex] != null ? ` (на сегодняшний день накоплено: ${graphData.temp[todayIndex]}°C)` : ''}`,
+          color: '#008000'
+        },
+        {
+          label: 'Предсказанные значения суммы эффективных температур',
+          additionalText: '',
+          color: '#ffa500'
+        }
+      ];
+
+      // Установка стилей текста
+      ctx.font = '18px Arial';
+      ctx.textAlign = 'left';
+
+      // Рассчитываем полную ширину (с учетом обоих текстов)
+      const mainTextWidth = ctx.measureText(segmentStyles[0].label).width;
+      ctx.font = 'bold 18px Arial';
+      const additionalTextWidth = segmentStyles[0].additionalText
+        ? ctx.measureText(segmentStyles[0].additionalText).width
+        : 0;
+
+      const totalWidth = Math.max(
+        mainTextWidth + additionalTextWidth,
+        ctx.measureText(segmentStyles[1].label).width
+      ) + 50; // + отступы и квадратик
+
+      // Позиционирование сверху
+      const xStart = (chart.width - totalWidth) / 2 + 40;
+      const yStart = 30; // Фиксированный отступ сверху
+
+      // Отрисовка элементов
+      segmentStyles.forEach((style, i) => {
+        const yPos = yStart + (i * 35); // 35px между элементами
+
+        // Цветной индикатор (16x16px)
+        ctx.fillStyle = style.color;
+        ctx.fillRect(xStart, yPos, 20, 20);
+
+        // Основной текст
+        ctx.font = '18px Arial';
+        ctx.fillStyle = '#333';
+        ctx.fillText(style.label, xStart + 25, yPos + 12);
+
+        // Дополнительный текст (жирный + цвет индикатора)
+        if (style.additionalText) {
+          const textWidth = ctx.measureText(style.label).width;
+          ctx.font = 'bold 18px Arial';
+          ctx.fillStyle = '#333';
+          ctx.fillText(style.additionalText, xStart + 25 + textWidth, yPos + 12);
+        }
+      });
+    }
+  };
+}
+function OptimalHarvestingTimingPlugin() {
+  return {
+    id: 'optimalHarvestingTimingPlugin',
     beforeDraw: (chart) => {
       const ctx = chart.ctx;
       const xAxis = chart.scales['x'];
@@ -89,7 +153,47 @@ function CreateBoxPlugin() {
         ctx.restore();
       }
     }
-  };
+  }
+}
+
+
+function DeleteZeroFromStart(data) {
+  let temp = data.temp.filter(item => item !== 0);
+  let differenceDays = data.temp.length - temp.length;
+  let date = data.date.slice(differenceDays);
+  return { temp, date }
+}
+
+function RemoveRepeatingGroups(data, limit = 10) {
+  let { temp, date } = DeleteZeroFromStart(data);
+  const tempLengthAfterZero = temp.length;
+
+  while (true) {
+    let lastValue = temp[temp.length - 1];
+    let count = 0;
+    let i = temp.length - 1;
+
+    while (i >= 0 && temp[i] === lastValue) {
+      count++;
+      i--;
+    }
+
+    if (count > limit) {
+      temp = temp.filter(value => value !== lastValue);
+    } else {
+      break;
+    }
+  }
+
+  let differenceDays = tempLengthAfterZero - temp.length;
+  date = date.slice(0, date.length - differenceDays);
+
+  return { temp, date };
+}
+
+function RemoveYear(data) {
+  const dateNoYear = data.date.map(item => item.slice(0, 5));
+  return { temp: data.temp, date: dateNoYear }
 }
 
 function getFormattedToday() {
@@ -97,71 +201,5 @@ function getFormattedToday() {
   const day = String(now.getDate()).padStart(2, '0');
   const month = String(now.getMonth() + 1).padStart(2, '0');
   const year = now.getFullYear();
-  return `${day}.${month}.${year}`;
-}
-
-function CreateChartConfig(data) {
-  const todayFormatted = getFormattedToday();
-  const todayIndex = data.date.findIndex(date => date === todayFormatted);
-
-  const greenDates = data.date.slice(0, todayIndex + 1);
-  const greenTemps = data.temp.slice(0, todayIndex + 1);
-
-  const orangeDates = data.date.slice(todayIndex + 1);
-  const orangeTemps = data.temp.slice(todayIndex + 1);
-
-  const datasets = [
-    {
-      label: `Фактические значения суммы эффективных температур${data?.temp?.[todayIndex] != null ? ` (на сегодняшний день накоплено: ${data.temp[todayIndex]}°C)` : ''
-        }`,
-
-      data: greenTemps.concat(Array(orangeTemps.length).fill(null)),
-      borderColor: 'green',
-      backgroundColor: 'green',
-      fill: false,
-      pointBackgroundColor: 'green',
-      pointBorderColor: 'green',
-      pointRadius: 3,
-      pointBorderWidth: 1,
-      spanGaps: true
-    }
-  ];
-
-  // Добавляем второй набор данных ТОЛЬКО если есть значения после сегодня
-  if (orangeTemps.length > 0) {
-    datasets.push({
-      label: 'Предсказанный значения суммы эффективных температур',
-      data: Array(todayIndex + 1).fill(null).concat(orangeTemps),
-      borderColor: 'orange',
-      backgroundColor: 'orange',
-      fill: false,
-      pointBackgroundColor: 'orange',
-      pointBorderColor: 'orange',
-      pointRadius: 3,
-      pointBorderWidth: 1,
-      spanGaps: true
-    });
-  }
-
-  return {
-    type: 'line',
-    data: {
-      labels: data.date,
-      datasets: datasets
-    },
-    options: {
-      plugins: {
-        legend: {
-          labels: {
-            font: {
-              size: 20,
-              weight: 600,
-              family: '"Proxima Nova", sans-serif'
-            }
-          }
-        }
-      }
-    },
-    plugins: [CreateBoxPlugin()]
-  };
+  return `${day}.${month}`;
 }

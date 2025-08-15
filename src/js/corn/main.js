@@ -76,7 +76,7 @@ function GetDate(startDate, endDate) {
 }
 
 // Изменение формата записи с ДД.ММ.ГГГГ до ГГГГ-ММ-ДД
-function DateParseForAPI(date) {
+export function DateParseForAPI(date) {
   const [day, month, year] = date.split('.');
   return `${year}-${month}-${day}`;
 }

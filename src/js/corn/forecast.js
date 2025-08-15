@@ -197,9 +197,6 @@ function IsPreviousDays(date) {
   const
     today = new Date().withoutTime().getTime(),
     chosenDay = new Date(date).withoutTime().getTime();
-
-  console.log('today', today)
-  console.log('chosenDay', chosenDay)
   if (chosenDay < today)
     return true;
 
