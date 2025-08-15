@@ -14,18 +14,17 @@ Date.prototype.withoutTime = function () {
 export async function CalculateByYear(dateRangeData) {
   try {
     if (IsPreviousDays(dateRangeData.startDateMinus)) {
-      console.log(dateRangeData, 'dateRangeData')
       const weatherData = await CalculateByPeriod(dateRangeData);
       if (!weatherData) {
         throw new Error('Не удалось получить погодные данные. Попробуйте позже или измените параметры');
       }
-      if (weatherData.sumEffectiveTemp < 850) {
-        const predictedData = await Prediction(weatherData, dateRangeData.endDateMinus)
-        return predictedData;
-      }
-      else {
-        return weatherData
-      }
+      // if (weatherData.sumEffectiveTemp < 850) {
+      const predictedData = await Prediction(weatherData, dateRangeData.endDateMinus)
+      return predictedData;
+      // }
+      /*       else {
+              return weatherData
+            } */
     }
     else {
       const predictedData = await Prediction({ date: [], temp: [], sumEffectiveTemp: 0 }, dateRangeData.startDateMinus);
