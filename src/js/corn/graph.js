@@ -2,48 +2,45 @@
 import Chart from 'chart.js/auto';
 import { chartObj } from './main.js';
 
-const tempGraph = document.getElementById('graph');
 
-export function PrintGraph(data) {
+export function PrintGraph(data, todayIndex) {
   console.log('data', data)
-  const graphData = RemoveYear(RemoveRepeatingGroups(data, 5));
+  const graphData = RemoveYear(data);
 
   if (chartObj.chart) {
     chartObj.chart.destroy();
   }
 
-  const todayIndex = graphData.date.findIndex((element) => element === getFormattedToday());
+  chartObj.chart = new Chart(document.getElementById('graph'), CreateChartConfig(graphData, todayIndex));
+}
 
-  new Chart
-    (
-      tempGraph,
-      {
-        type: 'line',
-        options: {
-          plugins: {
-            legend: { display: false },
-          }
-        },
-        data: {
-          labels: graphData.date,
-          datasets: [{
-            label: 'Значения суммы эффективных температур',
-            data: graphData.temp,
-            pointBorderColor: '#ffa500',
-            pointBackgroundColor: '#ffa500',
-            tension: 0.1,
-            // Добавить условие выхода сегодняшнего индекса за рамки массива, потому что он может быть удален зимой из-за повторов
-            segment: {
-              borderColor: (ctx) => ctx.p0DataIndex > todayIndex ? '#008000' : '#ffa500',
-              backgroundColor: (ctx) => ctx.p0DataIndex > todayIndex ? '#008000' : '#ffa500',
-            },
-            pointBorderColor: (ctx) => ctx.dataIndex > todayIndex ? '#008000' : '#ffa500',
-            pointBackgroundColor: (ctx) => ctx.dataIndex > todayIndex ? '#008000' : '#ffa500'
-          }]
-        },
-        plugins: [OptimalHarvestingTimingPlugin(), CustomLegendPlugin(graphData, todayIndex)],
+function CreateChartConfig(graphData, todayIndex) {
+  return {
+    type: 'line',
+    options: {
+      plugins: {
+        legend: { display: false },
       }
-    )
+    },
+    data: {
+      labels: graphData.date,
+      datasets: [{
+        label: 'Значения суммы эффективных температур',
+        data: graphData.temp,
+        pointBorderColor: '#ffa500',
+        pointBackgroundColor: '#ffa500',
+        tension: 0.1,
+        // Добавить условие выхода сегодняшнего индекса за рамки массива, потому что он может быть удален зимой из-за повторов
+        segment: {
+          borderColor: (ctx) => ctx.p0DataIndex > todayIndex ? '#008000' : '#ffa500',
+          backgroundColor: (ctx) => ctx.p0DataIndex > todayIndex ? '#008000' : '#ffa500',
+        },
+        pointBorderColor: (ctx) => ctx.dataIndex > todayIndex ? '#008000' : '#ffa500',
+        pointBackgroundColor: (ctx) => ctx.dataIndex > todayIndex ? '#008000' : '#ffa500'
+      }]
+    },
+    plugins: [OptimalHarvestingTimingPlugin(), CustomLegendPlugin(graphData, todayIndex)],
+  }
 }
 function CustomLegendPlugin(graphData, todayIndex) {
   return {
@@ -157,49 +154,13 @@ function OptimalHarvestingTimingPlugin() {
 }
 
 
-function DeleteZeroFromStart(data) {
-  let temp = data.temp.filter(item => item !== 0);
-  let differenceDays = data.temp.length - temp.length;
-  let date = data.date.slice(differenceDays);
-  return { temp, date }
-}
 
-function RemoveRepeatingGroups(data, limit = 10) {
-  let { temp, date } = DeleteZeroFromStart(data);
-  const tempLengthAfterZero = temp.length;
 
-  while (true) {
-    let lastValue = temp[temp.length - 1];
-    let count = 0;
-    let i = temp.length - 1;
 
-    while (i >= 0 && temp[i] === lastValue) {
-      count++;
-      i--;
-    }
-
-    if (count > limit) {
-      temp = temp.filter(value => value !== lastValue);
-    } else {
-      break;
-    }
-  }
-
-  let differenceDays = tempLengthAfterZero - temp.length;
-  date = date.slice(0, date.length - differenceDays);
-
-  return { temp, date };
-}
 
 function RemoveYear(data) {
   const dateNoYear = data.date.map(item => item.slice(0, 5));
   return { temp: data.temp, date: dateNoYear }
 }
 
-function getFormattedToday() {
-  const now = new Date();
-  const day = String(now.getDate()).padStart(2, '0');
-  const month = String(now.getMonth() + 1).padStart(2, '0');
-  const year = now.getFullYear();
-  return `${day}.${month}`;
-}
+

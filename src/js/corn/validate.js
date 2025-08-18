@@ -14,21 +14,21 @@ const
 
 latitude.addEventListener('change', (event) => {
   marker.update({
-    coordinates: [latitude.value, longitude.value]
+    coordinates: [longitude.value, latitude.value]
   });
   map.update({
     location: {
-      center: [latitude.value, longitude.value],
+      center: [longitude.value, latitude.value],
     }
   })
 })
 longitude.addEventListener('change', (event) => {
   marker.update({
-    coordinates: [latitude.value, longitude.value]
+    coordinates: [longitude.value, latitude.value]
   });
   map.update({
     location: {
-      center: [latitude.value, longitude.value],
+      center: [longitude.value, latitude.value],
     }
   })
 })

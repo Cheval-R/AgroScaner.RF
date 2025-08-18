@@ -19,6 +19,7 @@ export async function main() {
   try {
     if (!byPeriod.checked) {
       let totalData = await CalculateByYear(dateRangeData);
+
       if (!totalData)
         throw new Error('Не удалось произвести расчёт, попробуйте позже или измените параметры')
       PrintResult(totalData);
@@ -100,11 +101,56 @@ function GetPluralValues(count, rules) {
 }
 
 export function PrintResult(data) {
-  PrintEffectiveTemp(data, OptimalHarvestingTiming(data));
-  PrintGraph(data);
+  const clearData = RemoveRepeatingGroups(data, 5)
+  const todayIndex = clearData.date.findIndex((element) => element === getFormattedToday());
+
+  PrintEffectiveTemp(clearData, OptimalHarvestingTiming(clearData), todayIndex);
+
+  PrintGraph(clearData, todayIndex);
+}
+function getFormattedToday() {
+  const now = new Date();
+  const day = String(now.getDate()).padStart(2, '0');
+  const month = String(now.getMonth() + 1).padStart(2, '0');
+  const year = now.getFullYear();
+  return `${day}.${month}.${year}`;
 }
 
-function PrintEffectiveTemp(totalData, optimalHarvestingTiming) {
+function RemoveRepeatingGroups(data, limit = 10) {
+  let { temp, date } = DeleteZeroFromStart(data);
+  const tempLengthAfterZero = temp.length;
+
+  while (true) {
+    let lastValue = temp[temp.length - 1];
+    let count = 0;
+    let i = temp.length - 1;
+
+    while (i >= 0 && temp[i] === lastValue) {
+      count++;
+      i--;
+    }
+
+    if (count > limit) {
+      temp = temp.filter(value => value !== lastValue);
+    } else {
+      break;
+    }
+  }
+
+  let differenceDays = tempLengthAfterZero - temp.length;
+  date = date.slice(0, date.length - differenceDays);
+
+  return { ...data, temp, date };
+}
+
+function DeleteZeroFromStart(data) {
+  let temp = data.temp.filter(item => item !== 0);
+  let differenceDays = data.temp.length - temp.length;
+  let date = data.date.slice(differenceDays);
+  return { temp, date }
+}
+
+function PrintEffectiveTemp(totalData, optimalHarvestingTiming, todayIndex) {
   let introWord = 'Начиная с';
   if (!byPeriod.checked) {
     introWord = 'Со дня сева'
@@ -112,21 +158,23 @@ function PrintEffectiveTemp(totalData, optimalHarvestingTiming) {
   document.getElementById('output').style.display = 'block'
   document.getElementById('output__sum').innerHTML =
     `
-    ${introWord} <u>${totalData.date[0]}</u> до <u> ${totalData.date.at(-1)}</u> за ${GetPluralValues(totalData.date.length, ["день", "дня", "дней"])} накопится ${totalData.sumEffectiveTemp.toFixed(0)}°C эффективных температур.
-    `;
+    ${introWord} <u>${totalData.date[0]}</u> до <u> ${totalData.date.at(-1)}</u> за ${GetPluralValues(totalData.date.length, ["день", "дня", "дней"])} накопится <b>${totalData.sumEffectiveTemp.toFixed(0)}°C</b> эффективных температур.`;
+  if (totalData?.temp?.[todayIndex] != null) {
+    document.getElementById('output__today').innerHTML = `
+    На сегодняшний день накоплено: <b>${totalData.temp[todayIndex]}°C</b>`
+  }
+
 
   if (!optimalHarvestingTiming) {
     document.getElementById('output__optimal').innerHTML =
       `
       Оптимальные сроки уборки кукурузы на силос <b> не определены</b>
-        `;
+    `;
   } else {
     console.log('optimalHarvestingTiming', optimalHarvestingTiming)
     document.getElementById('output').style.display = 'block'
     document.getElementById('output__optimal').innerHTML =
-      `
-    Оптимальный срок уборки кукурузы на силос с <u> ${optimalHarvestingTiming.optimalStartDate}</u> до <u> ${optimalHarvestingTiming.optimalEndDate}</u>
-        `;
+      `Оптимальный срок уборки кукурузы на силос с <b><u> ${optimalHarvestingTiming.optimalStartDate}</u></b> до <b><u> ${optimalHarvestingTiming.optimalEndDate}</u></b> `;
   }
 }
 
