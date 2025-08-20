@@ -156,13 +156,13 @@ function PrintEffectiveTemp(totalData, optimalHarvestingTiming, todayIndex) {
     introWord = 'Со дня сева'
   }
   document.getElementById('output').style.display = 'block'
-  document.getElementById('output__sum').innerHTML =
+  document.getElementById('output__today').innerHTML =
     `
-    ${introWord} <u>${totalData.date[0]}</u> до <u> ${totalData.date.at(-1)}</u> за ${GetPluralValues(totalData.date.length, ["день", "дня", "дней"])} накопится <b>${totalData.sumEffectiveTemp.toFixed(0)}°C</b> эффективных температур.`;
-  if (totalData?.temp?.[todayIndex] != null) {
-    document.getElementById('output__today').innerHTML = `
-    На сегодняшний день накоплено: <b>${totalData.temp[todayIndex]}°C</b>`
-  }
+    ${introWord} <u>${totalData.date[0]}</u> до <u> ${totalData.date[todayIndex]}</u> за ${GetPluralValues(totalData.date.length, ["день", "дня", "дней"])} накопится <b>${totalData.temp[todayIndex].toFixed(0)}°C</b> эффективных температур.`;
+  /*   if (totalData?.temp?.[todayIndex] != null) {
+      document.getElementById('output__today').innerHTML = `
+      На сегодняшний день накоплено: <b>${totalData.temp[todayIndex]}°C</b>`
+    } */
 
 
   if (!optimalHarvestingTiming) {
