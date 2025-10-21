@@ -1,14 +1,15 @@
 import { removal } from './crops.js';
 import { activeSubstance } from './fertilizer.js';
 import { fieldsNur, fieldsPlanin, fieldsPecherskoeStavropol, fieldsPecherskoeSyzran, fieldsDuslyk, fieldsAnyak, fieldsTuganYak } from './fields.js';
+import { mainPage, clientPage } from "./blocks.js";
 
 document.addEventListener('DOMContentLoaded', function () {
   // ! Определение хозяйства
   const mainPageFlag = document.getElementById('main-page') ? true : false;
-  const companyName = document.querySelector('.companies__button--active');
-  const fieldsList = !mainPageFlag ? getCompanyName(companyName) : '';
+  const companyName = document.querySelector('#company-name');
+  let fieldsList = !mainPageFlag ? GetFields(companyName) : '';
 
-  function getCompanyName(companyName) {
+  function GetFields(companyName) {
     switch (companyName.textContent.toLocaleLowerCase()) {
       case 'ао «печерское»':
         return fieldsPecherskoeStavropol;
@@ -30,71 +31,121 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
 
-  const calculateButton = document.getElementById('calculate');
+  let fieldSelect = document.getElementById('fields');
+  let areaInput = document.getElementById('field-area');
+  let inputWrapper = document.getElementById('input-wrapper');
+  let nitrogen = document.getElementById('nitrogen');
+  let phosphorus = document.getElementById('phosphorus');
+  let potassium = document.getElementById('potassium');
 
-  calculateButton.addEventListener('click', function () {
-    // !Заполнение данных в объект
-    let inputData = {
-      /** Номер поля */
-      fieldName: '',
-      /** Площадь поля */
-      fieldArea: '',
-      /** Культура */
-      crop: '',
-      /** План.урожай */
-      harvest: '',
+  let currentClientIndex = undefined;
+  const clientsList = document.getElementById('clients');
+
+  clientsList.addEventListener('click', (event) => {
+    if (event.target.classList.contains('clients__button')) {
+      if (!event.target.classList.contains('clients__button--active')) {
+        if (mainPageFlag) {
+          inputWrapper.classList.remove('information__wrapper--manual');
+          inputWrapper.textContent = '';
+          clientPage.forEach(element => {
+            inputWrapper.innerHTML += element;
+          });
+          fieldSelect = document.getElementById('fields');
+          areaInput = document.getElementById('field-area');
+          inputWrapper = document.getElementById('input-wrapper');
+          nitrogen = document.getElementById('nitrogen');
+          phosphorus = document.getElementById('phosphorus');
+          potassium = document.getElementById('potassium');
+        }
+        ChangeCompany(companyName, event.target)
+      }
+    }
+  })
+
+  function ChangeCompany(companyName, newName) {
+    const fields = GetFields(newName);
+    console.log(fields);
+
+    if (fields) {
+      if (currentClientIndex !== undefined) {
+        [...clientsList.children].at(currentClientIndex).
+          children[0].classList.remove('clients__button--active');
+      }
+      currentClientIndex = [...clientsList.children].indexOf(newName.parentNode);
+      newName.classList.add('clients__button--active');
+      console.log(newName.parentNode, currentClientIndex);
+      fieldsList = fields;
+      companyName.textContent = newName.textContent;
+      fieldSelect.textContent = '';
+      AddFields(fieldSelect);
+      GetFieldArea(fieldSelect);
+    }
+  }
+
+  document.getElementById('calculate').
+    addEventListener('click', function () {
+      // !Заполнение данных в объект
+      let inputData = {
+        /** Номер поля */
+        fieldName: '',
+        /** Площадь поля */
+        fieldArea: '',
+        /** Культура */
+        crop: '',
+        /** План.урожай */
+        harvest: '',
 
 
-      /** Коэф. на агрохим. показатели поля N */
-      nitrogenCoefficient: 0,
-      /** Коэф. на агрохим. показатели поля P */
-      phosphorusCoefficient: 0,
-      /** Коэф. на агрохим. показатели поля K */
-      potassiumCoefficient: 0,
+        /** Коэф. на агрохим. показатели поля N */
+        nitrogenCoefficient: 0,
+        /** Коэф. на агрохим. показатели поля P */
+        phosphorusCoefficient: 0,
+        /** Коэф. на агрохим. показатели поля K */
+        potassiumCoefficient: 0,
 
-      /** Вынос культурой азота */
-      cropNitrogen: 0,
-      /** Вынос культурой фосфора */
-      cropPhosphorus: 0,
-      /** Вынос культурой калия */
-      cropPotassium: 0,
+        /** Вынос культурой азота */
+        cropNitrogen: 0,
+        /** Вынос культурой фосфора */
+        cropPhosphorus: 0,
+        /** Вынос культурой калия */
+        cropPotassium: 0,
 
-      /** Донные по азотному удобрению */
-      fertilizerN: {
-        name: '',
-        nitrogen: 0,
-        phosphorus: 0,
-        potassium: 0,
-        sulfur: 0,
-        price: document.getElementById('nitrogen-price').value,
-      },
+        /** Донные по азотному удобрению */
+        fertilizerN: {
+          name: '',
+          nitrogen: 0,
+          phosphorus: 0,
+          potassium: 0,
+          sulfur: 0,
+          price: document.getElementById('nitrogen-price').value,
+        },
 
-      /** Донные по фосфорному удобрению */
-      fertilizerP: {
-        name: '',
-        nitrogen: 0,
-        phosphorus: 0,
-        potassium: 0,
-        sulfur: 0,
-        price: document.getElementById('phosphorus-price').value,
-      },
+        /** Донные по фосфорному удобрению */
+        fertilizerP: {
+          name: '',
+          nitrogen: 0,
+          phosphorus: 0,
+          potassium: 0,
+          sulfur: 0,
+          price: document.getElementById('phosphorus-price').value,
+        },
 
-      /** Донные по калийному удобрению */
-      fertilizerK: {
-        name: '',
-        nitrogen: 0,
-        phosphorus: 0,
-        potassium: 0,
-        sulfur: 0,
-        price: document.getElementById('potassium-price').value,
-      },
-    };
+        /** Донные по калийному удобрению */
+        fertilizerK: {
+          name: '',
+          nitrogen: 0,
+          phosphorus: 0,
+          potassium: 0,
+          sulfur: 0,
+          price: document.getElementById('potassium-price').value,
+        },
+      };
 
-    getInput(inputData);
-    calculateDoses(inputData);
+      getInput(inputData);
+      calculateDoses(inputData);
 
-    console.log('inputData', inputData);
-  });
+      console.log('inputData', inputData);
+    });
 
 
   // !Заполнение inputData
@@ -322,14 +373,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
   // ! Изменение цены удобрений
-  console.log('asdadsa', document.getElementById('nitrogen'))
-  document.getElementById('nitrogen').addEventListener('change', function () {
+  nitrogen.addEventListener('change', function () {
     changeFertilizerPrice("nitrogen-price", this.value);
   });
-  document.getElementById('phosphorus').addEventListener('change', function () {
+  phosphorus.addEventListener('change', function () {
     changeFertilizerPrice("phosphorus-price", this.value);
   });
-  document.getElementById('potassium').addEventListener('change', function () {
+  potassium.addEventListener('change', function () {
     changeFertilizerPrice("potassium-price", this.value);
   });
 
@@ -344,15 +394,30 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // ! Изменение площади при изменении поля
   // * НЕ ОБЩАЯ (ДЛЯ ПОЛЕЙ)
+
+  function GetFieldArea(fieldSelect) {
+    for (const elem of fieldsList) {
+      if (fieldSelect.value === elem.name) {
+        areaInput.value = elem.area;
+        break;
+      }
+    }
+  }
+  function AddFields(fieldSelect) {
+    fieldsList.forEach(elem => {
+      let option = document.createElement('option');
+      option.textContent = elem.name;
+      fieldSelect.appendChild(option);
+    });
+  }
   if (!mainPageFlag) {
-    const fieldSelect = document.getElementById('fields');
+    areaInput.value = fieldsList.at(0).area;
+
+    AddFields(fieldSelect);
+
     // !Добавляем обработчик события change
     fieldSelect.addEventListener('change', function () {
-      fieldsList.forEach(elem => {
-        if (fieldSelect.value === elem.name) {
-          document.getElementById('field-area').value = elem.area;
-        }
-      });
+      GetFieldArea(fieldSelect, fieldsList, areaInput)
     });
   }
   else {
@@ -384,13 +449,15 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
 
-  document.getElementById('input-table').addEventListener('change', function (event) {
+  document.getElementById('input-wrapper').addEventListener('change', function (event) {
     if (["field-area",
       "harvest",
       "nitrogen-price",
       "phosphorus-price",
       "potassium-price"
     ].includes(event.target.id)) {
+      console.log('chanfe');
+
       setZeroValueInput(event.target);
     }
   })

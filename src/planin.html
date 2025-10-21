@@ -13,172 +13,58 @@
 
 <body>
   <header class="header">
-    <div class="container container--fullscreen">
-      <div class="header__wrapper">
-        <div class="logo">
-          <a class="logo__link" href="https://tatagrohimservis.ru/">
-            <img class="logo__image" src="./img/logo-tahs.png" alt="Логотип">
-          </a>
-        </div>
-        <nav class="nav">
-          <ul class="nav__list">
-            <li class="nav__item">
-              <a class="nav__link" href="./index.html">Калькулятор удобрений</a>
-            </li>
-            <li class="nav__item">
-              <a class="nav__link" href="./corn-harvesting.html">Расчёт срока уборки силоса</a>
-            </li>
-          </ul>
-        </nav>
-        <div class="logo logo-lab">
-          <a class="logo__link" href="./index.html  ">
-            <img class="logo__image" src="./img/logo-lab.png" alt="Логотип">
-          </a>
-        </div>
-      </div>
+    <div class="container">
+      <nav class="nav">
+        <ul class="nav__list">
+          <li class="nav__item"><a class="nav__link" href="https://tatagrohimservis.ru/"><img class="nav__img" src="./img/logo-tahs.png" alt=""></a></li>
+          <li class="nav__item button button--orange"><a class="nav__link" href="./calculator.html">Расчёт дозы мин. удобрений</a></li>
+          <li class="nav__item button"><a class="nav__link" href="./corn-harvesting.html">Расчёт сроков уборки силоса</a></li>
+          <li class="nav__item"><a class="nav__link" href="https://xn--80aaijxtepff.xn--p1ai/"><img class="nav__img" src="./img/logo-lab.png" alt=""></a></li>
+        </ul>
+        <!-- <h1 class="page__title">Калькулятор расчёта доз и стоимости удобрений</h1> -->
+      </nav>
     </div>
   </header>
   <main>
-    <section class="section companies">
-      <div class="container container--fullscreen">
-        <div class="companies__links">
-          <div class="companies__wrapper">
-            <a class="button companies__button" href="./pecherskoe-stavropol.html">АО&nbsp;&laquo;Печерское&raquo;</a>
-            <a class="button companies__button companies__button--active" href="./planin.html">КФХ &laquo;Планин&raquo;</a>
-            <a class="button companies__button" href="./nur.html">ООО &laquo;НУР&raquo;</a>
-            <a class="button companies__button" href="./duslyk.html">ООО &laquo;Дуслык&raquo;</a>
-            <a class="button companies__button" href="./anyak.html">ООО &laquo;Аняк&raquo;</a>
-            <a class="button companies__button" href="./tugan-yak.html">ООО &laquo;Туган Як&raquo;</a>
-          </div>
-        </div>
-      </div>
-    </section>
-    <h1 class="page-title">Калькулятор доз внесения и стоимости удобрений</h1>
-    <section class="section calculator">
-      <div class="container container--fullscreen">
-        <table class="calculator__table">
-          <thead>
-            <th class="calculator__header calculator__header--title" colspan="2">Азот</th>
-            <th class="calculator__header calculator__header--title" colspan="2">Фосфор</th>
-            <th class="calculator__header calculator__header--title" colspan="2">Калий</th>
-            <th class="calculator__header calculator__header--title">Общее</th>
-          </thead>
-          <tbody>
-            <tr>
-              <td class="calculator__header calculator__header--main">Физ. вес</td>
-              <td class="calculator__header calculator__header--main">Стоимость</td>
-              <td class="calculator__header calculator__header--main">Физ. вес</td>
-              <td class="calculator__header calculator__header--main">Стоимость</td>
-              <td class="calculator__header calculator__header--main">Физ. вес</td>
-              <td class="calculator__header calculator__header--main">Стоимость</td>
-              <td class="calculator__header calculator__header--main">Стоимость</td>
-            </tr>
-            <tr>
-              <td class="calculator__header calculator__header--ga">кг/га</td>
-              <td class="calculator__header calculator__header--ga">руб/га</td>
-              <td class="calculator__header calculator__header--ga">кг/га</td>
-              <td class="calculator__header calculator__header--ga">руб/га</td>
-              <td class="calculator__header calculator__header--ga">кг/га</td>
-              <td class="calculator__header calculator__header--ga">руб/га</td>
-              <td class="calculator__header calculator__header--ga">руб/га</td>
-            </tr>
-            <tr>
-              <td id="phys-ga-nitrogen">0</td>
-              <td id="price-ga-nitrogen">0</td>
-              <td id="phys-ga-phosphorus">0</td>
-              <td id="price-ga-phosphorus">0</td>
-              <td id="phys-ga-potassium">0</td>
-              <td id="price-ga-potassium">0</td>
-              <td id="price-ga-total">0</td>
-            </tr>
-            <tr>
-              <td class="calculator__header calculator__header--ga">тонн/поле</td>
-              <td class="calculator__header calculator__header--ga">руб/поле</td>
-              <td class="calculator__header calculator__header--ga">тонн/поле</td>
-              <td class="calculator__header calculator__header--ga">руб/поле</td>
-              <td class="calculator__header calculator__header--ga">тонн/поле</td>
-              <td class="calculator__header calculator__header--ga">руб/поле</td>
-              <td class="calculator__header calculator__header--ga">руб/поле</td>
-            </tr>
-            <tr>
-              <td id="phys-field-nitrogen">0</td>
-              <td id="price-field-nitrogen">0</td>
-              <td id="phys-field-phosphorus">0</td>
-              <td id="price-field-phosphorus">0</td>
-              <td id="phys-field-potassium">0</td>
-              <td id="price-field-potassium">0</td>
-              <td id="price-field-total">0</td>
-            </tr>
-          </tbody>
-        </table>
-        <button class="button calculator__button" id="calculate">Рассчитать</button>
-      </div>
-    </section>
-    <section class="section information">
+    <h1 class="page-title">Калькулятор доз внесения и стоимости удобрений <span id="company-name">КФХ «Планин»</span></h1>
+    <p id="company-name" class="visually-hidden">планин</p>
+    <section class="clients section">
       <div class="container">
-        <div class="information__wrapper">
-          <table id="input-table" class="information__table fertilizer" border="1" cellpadding="5" cellspacing="0">
+        <h2 class="visually-hidden">Список клиентов</h2>
+        <ul class="clients__list" id="clients">
+          <li class="clients__item button"><a class="clients__link" href="#!">АО&nbsp;&laquo;Печерское&raquo;</a></li>
+          <li class="clients__item button"><a class="clients__link" href="./planin.html">КФХ &laquo;Планин&raquo;</a></li>
+          <li class="clients__item button"><a class="clients__link" href="#!">ООО &laquo;НУР&raquo;</a></li>
+          <li class="clients__item button"><a class="clients__link" href="#!">ООО &laquo;Дуслык&raquo;</a></li>
+          <li class="clients__item button"><a class="clients__link" href="#!">ООО &laquo;Аняк&raquo;</a></li>
+          <li class="clients__item button"><a class="clients__link" href="#!">ООО &laquo;Туган Як&raquo;</a></li>
+        </ul>
+      </div>
+    </section>
+    <section class="information section">
+      <h2 class="visually-hidden">Блок вводимой информации </h2>
+      <div class="container">
+        <div class="information__wrapper" id="input-wrapper">
+          <table class="information__table field-info" data-table="first">
             <thead>
               <tr>
-                <th colspan="2">Удобрения</th>
-                <th>№ поля</th>
+                <th colspan="2">Параметры поля</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td>Название</td>
-                <td>Стоимость</td>
+                <td>№ поля</td>
                 <td>
                   <select id="fields">
-                    <option>202 га</option>
-                    <option>202 га (3)</option>
-                    <option>72 га</option>
                   </select>
                 </td>
               </tr>
               <tr>
-                <td colspan="2">Азотное</td>
-                <td>Площадь</td>
+                <td>Площадь поля</td>
+                <td> <input id="field-area" type="number" min="0"></td>
               </tr>
               <tr>
-                <td>
-                  <select id="nitrogen">
-                    <option>Нет</option>
-                    <option>Аммиачная селитра</option>
-                    <option>Сульфонитрат (30:7)</option>
-                    <option>Сульфонитрат (26:13)</option>
-                    <option>КАС(28)</option>
-                    <option>Карбамид</option>
-                    <option>Сульфат аммония</option>
-                    <option>Безводный аммиак</option>
-                  </select>
-                </td>
-                <td class="fertilizer__price">
-                  <input id="nitrogen-price" type="number" min="0">
-                </td>
-                <td><input id="field-area" name="" id="" type="text"></td>
-              </tr>
-              <tr>
-                <td colspan="2">Фосфорное</td>
                 <td>Культура</td>
-              </tr>
-              <tr>
-                <td>
-                  <select id="phosphorus">
-                    <option>Нет</option>
-                    <option>Аммофос(52)</option>
-                    <option>Аммофос(46)</option>
-                    <option>Диаммофоска</option>
-                    <option>Азофоска(15)</option>
-                    <option>Азофоска(16)</option>
-                    <option>NPKS(4)</option>
-                    <option>NPKS(8)</option>
-                    <option>Фосмука</option>
-                  </select>
-                </td>
-                <td class="fertilizer__price">
-                  <input id="phosphorus-price" type="number" min="0">
-                </td>
                 <td>
                   <select id="crop">
                     <option>Пшеница яровая</option>
@@ -226,13 +112,74 @@
                   </select>
                 </td>
               </tr>
+              <td>Планируемый урожай</td>
+              <td><input id="harvest" type="number" min="0"></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <table class="information__table fertilizer" id="input-table" data-table="second">
+            <thead>
               <tr>
-                <td colspan="2">Калийное</td>
-                <td>Урожай</td>
+                <th colspan="4">Выбор удобрений</th>
+              </tr>
+              <tr>
+                <th>Тип</th>
+                <th>Удобрение</th>
+                <th>Стоимость</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <p>Азотное</p>
+                </td>
+                <td>
+                  <select id="nitrogen">
+                    <option value="" disabled selected hidden></option>
+                    <option>Нет</option>
+                    <option>Аммиачная селитра</option>
+                    <option>Сульфонитрат (30:7)</option>
+                    <option>Сульфонитрат (26:13)</option>
+                    <option>КАС(28)</option>
+                    <option>Карбамид</option>
+                    <option>Сульфат аммония</option>
+                    <option>Безводный аммиак</option>
+                  </select>
+                </td>
+                <td class="fertilizer__price">
+                  <input id="nitrogen-price" type="number" min="0">
+                </td>
               </tr>
               <tr>
                 <td>
+                  <p>Фосфорное</p>
+                </td>
+                <td>
+                  <select id="phosphorus">
+                    <option value="" disabled selected hidden></option>
+                    <option>Нет</option>
+                    <option>Аммофос(52)</option>
+                    <option>Аммофос(46)</option>
+                    <option>Диаммофоска</option>
+                    <option>Азофоска(15)</option>
+                    <option>Азофоска(16)</option>
+                    <option>NPKS(4)</option>
+                    <option>NPKS(8)</option>
+                    <option>Фосмука</option>
+                  </select>
+                </td>
+                <td class="fertilizer__price">
+                  <input id="phosphorus-price" type="number" min="0">
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <p>Калийное</p>
+                </td>
+                <td>
                   <select id="potassium">
+                    <option value="" disabled selected hidden></option>
                     <option>Нет</option>
                     <option>Калий хлористый</option>
                     <option>Калий сернокислый</option>
@@ -241,12 +188,78 @@
                 <td class="fertilizer__price">
                   <input id="potassium-price" type="number" min="0">
                 </td>
-                <td><input id="harvest" type="number"></td>
               </tr>
             </tbody>
           </table>
-
         </div>
+      </div>
+    </section>
+    <section class="section calculator">
+      <div class="container container--fullscreen">
+        <div class="calculator__table">
+          <div class="result-column result-column--nitrogen">
+            <h2 class="calculator__header calculator__header--title">Азот</h2>
+            <div class="result-column__phys">
+              <h3 class="calculator__header calculator__header--main">Физ. вес</h3>
+              <h3 class="calculator__header calculator__header--ga">кг/га</h3>
+              <h3 class="calculator__header calculator__header--field">т./поле</h3>
+              <p class="result-column__answer" id="phys-ga-nitrogen">0</p>
+              <p class="result-column__answer" id="phys-field-nitrogen">0</p>
+            </div>
+            <div class="result-column__price">
+              <h3 class="calculator__header calculator__header--main">Стоимость</h3>
+              <h3 class="calculator__header calculator__header--ga">руб/га</h3>
+              <h3 class="calculator__header calculator__header--field">руб/поле</h3>
+              <p class="result-column__answer" id="price-ga-nitrogen">0</p>
+              <p class="result-column__answer" id="price-field-nitrogen">0</p>
+            </div>
+          </div>
+          <div class="result-column result-column--phosphorus">
+            <h2 class="calculator__header calculator__header--title">Фосфор</h2>
+            <div class="result-column__phys">
+              <h3 class="calculator__header calculator__header--main">Физ. вес</h3>
+              <h3 class="calculator__header calculator__header--ga">кг/га</h3>
+              <h3 class="calculator__header calculator__header--field">т./поле</h3>
+              <p class="result-column__answer" id="phys-ga-phosphorus">0</p>
+              <p class="result-column__answer" id="phys-field-phosphorus">0</p>
+            </div>
+            <div class="result-column__price">
+              <h3 class="calculator__header calculator__header--main">Стоимость</h3>
+              <h3 class="calculator__header calculator__header--ga">руб/га</h3>
+              <h3 class="calculator__header calculator__header--field">руб/поле</h3>
+              <p class="result-column__answer" id="price-ga-phosphorus">0</p>
+              <p class="result-column__answer" id="price-field-phosphorus">0</p>
+            </div>
+          </div>
+          <div class="result-column result-column--potassium">
+            <h2 class="calculator__header calculator__header--title">Калий</h2>
+            <div class="result-column__phys">
+              <h3 class="calculator__header calculator__header--main">Физ. вес</h3>
+              <h3 class="calculator__header calculator__header--ga">кг/га</h3>
+              <h3 class="calculator__header calculator__header--field">т./поле</h3>
+              <p class="result-column__answer" id="phys-ga-potassium">0</p>
+              <p class="result-column__answer" id="phys-field-potassium">0</p>
+            </div>
+            <div class="result-column__price">
+              <h3 class="calculator__header calculator__header--main">Стоимость</h3>
+              <h3 class="calculator__header calculator__header--ga">руб/га</h3>
+              <h3 class="calculator__header calculator__header--field">руб/поле</h3>
+              <p class="result-column__answer" id="price-ga-potassium">0</p>
+              <p class="result-column__answer" id="price-field-potassium">0</p>
+            </div>
+          </div>
+          <div class="result-column result-column--total">
+            <h2 class="calculator__header calculator__header--title">Общее</h2>
+            <div class="result-column__price">
+              <h3 class="calculator__header calculator__header--main">Стоимость</h3>
+              <h3 class="calculator__header calculator__header--ga">руб/га</h3>
+              <h3 class="calculator__header calculator__header--field">руб/поле</h3>
+              <p class="result-column__answer" id="price-ga-total">0</p>
+              <p class="result-column__answer" id="price-field-total">0</p>
+            </div>
+          </div>
+        </div>
+        <button class="button calculator__button" id="calculate">Рассчитать</button>
       </div>
     </section>
   </main>

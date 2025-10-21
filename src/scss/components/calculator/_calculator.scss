@@ -1,3 +1,7 @@
+.page-title {
+  text-align: center;
+}
+
 // ! Clients
 
 .clients {
@@ -25,9 +29,12 @@
       font-size: clamp(12px, 2.7vw, 16px);
     }
   }
-  &__link {
+  &__button {
     display: block;
     // padding: 2px 5px;
+    &--active {
+      background-color: red;
+    }
   }
 }
 
@@ -40,9 +47,12 @@
     display: grid;
     gap: 15px;
     justify-content: space-between;
-    grid-template-areas:
-      "gradation fertilizer"
-      "field field";
+    grid-template-areas: "first-table second-table";
+    &--manual {
+      grid-template-areas:
+        "first-table second-table"
+        "third-table third-table";
+    }
   }
   &__table {
     padding: 5px;
@@ -75,11 +85,13 @@
         border-bottom-left-radius: 10px;
       }
     }
+    input,
+    select {
+      text-align: center;
+    }
   }
 }
 .gradation {
-  grid-area: gradation;
-
   &__low {
     background-color: #ee8138;
   }
@@ -90,11 +102,15 @@
     background-color: #ffc411;
   }
 }
-.field-info {
-  grid-area: field;
+
+[data-table="first"] {
+  grid-area: first-table;
 }
-.fertilizer {
-  grid-area: fertilizer;
+[data-table="second"] {
+  grid-area: second-table;
+}
+[data-table="third"] {
+  grid-area: third-table;
 }
 
 // ! Calculator
@@ -284,12 +300,22 @@
     flex-wrap: wrap;
   }
 
-  .information__wrapper {
-    grid-template-areas: "gradation" "fertilizer" "field";
-  }
+  .information {
+    &__wrapper {
+      grid-template-areas:
+        "first-table"
+        "second-table";
+      &--manual {
+        grid-template-areas:
+          "first-table"
+          "second-table"
+          "third-table";
+      }
+    }
 
-  .information__table {
-    line-height: 1.5;
+    &__table {
+      line-height: 1.5;
+    }
   }
 
   .region-button {

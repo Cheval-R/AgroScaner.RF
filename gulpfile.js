@@ -180,6 +180,7 @@ const pageScripts = {
     './src/js/calculator/fertilizer.js',
     './src/js/calculator/fields.js',
     './src/js/calculator/calculator.js',
+    './src/js/calculator/blocks.js',
   ]
 };
 
