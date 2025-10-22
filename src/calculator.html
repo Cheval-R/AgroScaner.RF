@@ -4,14 +4,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="shortcut icon" type="image/png" href="./img/favicon.png" />
   <title>Калькулятор расчёта доз удобрений</title>
 
-  <link rel="shortcut icon" type="image/png" href="./img/favicon.png" />
   <link rel="stylesheet" href="./css/calculator.min.css">
   <script type="module" src="./js/calculator.min.js"></script>
 </head>
 
-<body class="main-page" id="main-page">
+<body>
   <header class="header">
     <div class="container">
       <nav class="nav">
@@ -31,6 +31,9 @@
       <div class="container">
         <h2 class="visually-hidden">Список клиентов</h2>
         <ul class="clients__list" id="clients">
+          <li class=" clients__item">
+            <button class="clients__button clients__button--active button" id="back-to-manual" href="#!">Ручной режим</button>
+          </li>
           <li class=" clients__item">
             <button class="clients__button button" href="#!">АО&nbsp;&laquo;Печерское&raquo;</button>
           </li>
