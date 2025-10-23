@@ -24,7 +24,8 @@ document.addEventListener('DOMContentLoaded', function () {
   clientsList = document.getElementById('clients');
 
   BindInput();
-  // ! переписать в функцию
+
+  // Смена клиента / ручной ввод
   clientsList.addEventListener('click', (event) => {
     ChangeCompany(event.target, companyName, clientsList);
   })
@@ -32,93 +33,38 @@ document.addEventListener('DOMContentLoaded', function () {
   // ! переписать в функцию
   document.getElementById('calculate').
     addEventListener('click', function () {
+      const getFertilizer = (id) => ({
+        name: '',
+        nitrogen: 0,
+        phosphorus: 0,
+        potassium: 0,
+        sulfur: 0,
+        price: document.getElementById(id).value
+      });
+
       // !Заполнение данных в объект
       let inputData = {
-        /** Номер поля */
         fieldName: '',
-        /** Площадь поля */
         fieldArea: '',
-        /** Культура */
         crop: '',
-        /** План.урожай */
         harvest: '',
-
-
-        /** Коэф. на агрохим. показатели поля N */
+        /** Коэф. на агрохим. показатели поля */
         nitrogenCoefficient: 0,
-        /** Коэф. на агрохим. показатели поля P */
         phosphorusCoefficient: 0,
-        /** Коэф. на агрохим. показатели поля K */
         potassiumCoefficient: 0,
-
-        /** Вынос культурой азота */
+        /** Вынос культурой */
         cropNitrogen: 0,
-        /** Вынос культурой фосфора */
         cropPhosphorus: 0,
-        /** Вынос культурой калия */
         cropPotassium: 0,
 
-        /** Донные по азотному удобрению */
-        fertilizerN: {
-          name: '',
-          nitrogen: 0,
-          phosphorus: 0,
-          potassium: 0,
-          sulfur: 0,
-          price: document.getElementById('nitrogen-price').value,
-        },
-
-        /** Донные по фосфорному удобрению */
-        fertilizerP: {
-          name: '',
-          nitrogen: 0,
-          phosphorus: 0,
-          potassium: 0,
-          sulfur: 0,
-          price: document.getElementById('phosphorus-price').value,
-        },
-
-        /** Донные по калийному удобрению */
-        fertilizerK: {
-          name: '',
-          nitrogen: 0,
-          phosphorus: 0,
-          potassium: 0,
-          sulfur: 0,
-          price: document.getElementById('potassium-price').value,
-        },
+        fertilizerN: getFertilizer('nitrogen-price'),
+        fertilizerP: getFertilizer('phosphorus-price'),
+        fertilizerK: getFertilizer('potassium-price'),
       };
 
-      getInput(inputData);
-      calculateDoses(inputData);
-
-      console.log('inputData', inputData);
+      GetInputData(inputData);
+      CalculatePrice(inputData);
     });
-
-  if (!manualPageFlag) {
-    areaInput.value = fieldsList.at(0).area;
-
-    AddFields(fieldSelect);
-
-    // !Добавляем обработчик события change
-    fieldSelect.addEventListener('change', function () {
-      GetFieldArea(fieldSelect, fieldsList, areaInput)
-    });
-  }
-  else {
-    // * НЕ ОБЩИЕ (ДЛЯ ГЛАВНОЙ СТРАНИЦЫ) 
-    document.getElementById('n-value').addEventListener('change', function () {
-      paintTheCell(2.9, 6.2, this);
-    })
-    document.getElementById('p-value').addEventListener('change', function () {
-      paintTheCell(20, 40, this);
-    })
-    document.getElementById('k-value').addEventListener('change', function () {
-      paintTheCell(6, 12, this);
-    })
-
-
-  }
 
   document.getElementById('input-wrapper').addEventListener('change', function (event) {
     if (["field-area",
@@ -199,7 +145,7 @@ function ChangeActiveClient(currentClientIndex, newClient, companyName, newName)
 
 
 // Заполнение inputData
-function getInput(inputData) {
+function GetInputData(inputData) {
   if (!manualPageFlag) {
     inputData.fieldName = document.getElementById('fields').value;
   }
@@ -212,19 +158,17 @@ function getInput(inputData) {
 
 
   // ! Получение выноса культуры
-  getCropData(inputData);
-
+  GetCropData(inputData);
   // ! Получение данных поля
-  getFieldData(inputData);
-
+  GetFieldCoefficients(inputData);
   // ! Получение данных об удобрениях
-  fertilizerCatch(inputData);
+  FertilizerCatch(inputData);
 }
 
 
 // ? Получение данных о выносе культуры
 /** Получение данных о выносе культуры */
-function getCropData(inputData) {
+function GetCropData(inputData) {
   removal.forEach(function (removal) {
     if (removal.name === inputData.crop) {
       inputData.cropNitrogen = removal.nitrogen;
@@ -236,73 +180,53 @@ function getCropData(inputData) {
 
 // ? Получение данных поля
 /** Получение данных поля */
-function getFieldData(inputData) {
+function GetFieldCoefficients(inputData) {
+  let nValue, pValue, kValue;
   if (manualPageFlag) {
-    const nValue = document.getElementById('n-value').value;
-    const pValue = document.getElementById('p-value').value;
-    const kValue = document.getElementById('k-value').value;
-    const coefficients = getCoefficient(nValue, pValue, kValue)
-    inputData.nitrogenCoefficient = coefficients[0];
-    inputData.phosphorusCoefficient = coefficients[1];
-    inputData.potassiumCoefficient = coefficients[2];
+    nValue = document.getElementById('n-value').value;
+    pValue = document.getElementById('p-value').value;
+    kValue = document.getElementById('k-value').value;
   }
   else {
-    console.log('Поля:\t', inputData.fieldName);
     fieldsList.forEach(function (field) {
       if (inputData.fieldName === field.name) {
-        console.log('АХ показатели:\t', field.organic, field.phosphorus, field.potassium);
-
-        const coefficients = getCoefficient(field.organic, field.phosphorus, field.potassium)
-        inputData.nitrogenCoefficient = coefficients[0];
-        inputData.phosphorusCoefficient = coefficients[1];
-        inputData.potassiumCoefficient = coefficients[2];
+        nValue = field.organic;
+        pValue = field.phosphorus;
+        kValue = field.potassium;
       }
     });
   }
+  const { nitrogenCoefficient, phosphorusCoefficient, potassiumCoefficient } =
+    GetNPKCoefficients(nValue, pValue, kValue);
+
+  inputData.nitrogenCoefficient = nitrogenCoefficient;
+  inputData.phosphorusCoefficient = phosphorusCoefficient;
+  inputData.potassiumCoefficient = potassiumCoefficient;
 }
 
 // ! Получение коэффициентов агрохим. показателей поля
 /** Получение коэффициентов агрохим. показателей поля */
-function getCoefficient(nitrogen, phosphorus, potassium) {
-  let nitrogenCoefficient;
-  if (nitrogen < 2.9) {
-    nitrogenCoefficient = 1;
-  } else if (nitrogen >= 2.9 && nitrogen <= 6.2) {
-    nitrogenCoefficient = 0.75;
-  } else if (nitrogen > 6.2) {
-    nitrogenCoefficient = 0.6;
-  }
+function GetNPKCoefficients(nitrogen, phosphorus, potassium) {
+  let nitrogenCoefficient =
+    nitrogen < 2.9 ? 1
+      : nitrogen <= 6.2 ? 0.75
+        : 0.6;
 
-  let phosphorusCoefficient;
-  if (phosphorus < 20) {
-    phosphorusCoefficient = 1.3;
-  } else if (phosphorus >= 20 && phosphorus < 25) {
-    phosphorusCoefficient = 1.2;
-  } else if (phosphorus >= 25 && phosphorus < 30) {
-    phosphorusCoefficient = 1.1;
-  } else if (phosphorus >= 30 && phosphorus < 35) {
-    phosphorusCoefficient = 1;
-  } else if (phosphorus >= 35 && phosphorus < 40) {
-    phosphorusCoefficient = 0.9;
-  } else if (phosphorus > 40) {
-    phosphorusCoefficient = 0.7;
-  }
+  let phosphorusCoefficient =
+    phosphorus < 20 ? 1.3
+      : phosphorus < 25 ? 1.2
+        : phosphorus < 30 ? 1.1
+          : phosphorus < 35 ? 1
+            : phosphorus < 40 ? 0.9
+              : 0.7;
 
-
-  let potassiumCoefficient;
-  if (potassium < 6) {
-    potassiumCoefficient = 1.5;
-  } else if (potassium >= 6 && potassium < 7.5) {
-    potassiumCoefficient = 1.1;
-  } else if (potassium >= 7.5 && potassium < 9) {
-    potassiumCoefficient = 1.0;
-  } else if (potassium >= 9 && potassium < 10.5) {
-    potassiumCoefficient = 0.9;
-  } else if (potassium >= 10.5 && potassium < 12) {
-    potassiumCoefficient = 0.8;
-  } else if (potassium > 12) {
-    potassiumCoefficient = 0.7;
-  }
+  let potassiumCoefficient =
+    potassium < 6 ? 1.5
+      : potassium < 7.5 ? 1.1
+        : potassium < 9 ? 1.0
+          : potassium < 10.5 ? 0.9
+            : potassium < 12 ? 0.8
+              : 0.7;
 
   console.log(
     `Коэффициенты:
@@ -311,38 +235,38 @@ function getCoefficient(nitrogen, phosphorus, potassium) {
 		Калий: ${potassiumCoefficient}`
   );
 
-  return [nitrogenCoefficient, phosphorusCoefficient, potassiumCoefficient];
+  return { nitrogenCoefficient, phosphorusCoefficient, potassiumCoefficient };
 }
 
 // ! Получение данных об удобрениях
 /** Получение данных об удобрениях */
-function fertilizerCatch(inputData) {
+function FertilizerCatch(inputData) {
   activeSubstance.forEach(elem => {
     // *Азотное удобрение
     if (inputData.fertilizerN.name === elem.name) {
-      getFertilizerData(inputData.fertilizerN, elem);
+      GetFertilizerData(inputData.fertilizerN, elem);
     }
     // *Фосфорное удобрение
     if (inputData.fertilizerP.name === elem.name) {
-      getFertilizerData(inputData.fertilizerP, elem);
+      GetFertilizerData(inputData.fertilizerP, elem);
     }
     // *Калийное удобрение
     if (inputData.fertilizerK.name === elem.name) {
-      getFertilizerData(inputData.fertilizerK, elem);
+      GetFertilizerData(inputData.fertilizerK, elem);
     }
   });
 }
 
 // ? Заполнение ДВ удобрений
 /** Заполнение ДВ удобрений */
-function getFertilizerData(fertilizerData, currentFertilizer) {
+function GetFertilizerData(fertilizerData, currentFertilizer) {
   fertilizerData.nitrogen = currentFertilizer.nitrogen;
   fertilizerData.phosphorus = currentFertilizer.phosphorus;
   fertilizerData.potassium = currentFertilizer.potassium;
   fertilizerData.sulfur = currentFertilizer.sulfur;
 }
 
-function calculateDoses(inputData) {
+function CalculatePrice(inputData) {
   // ! Считаем дозы NPK
   const doseP =
     Math.round(inputData.phosphorusCoefficient * inputData.harvest * inputData.cropPhosphorus);
@@ -364,24 +288,16 @@ function calculateDoses(inputData) {
 
   if (physWeightN > 0) {
     document.getElementById('phys-ga-nitrogen').textContent = physWeightN;
-  }
-  if (physWeightP > 0) {
-    document.getElementById('phys-ga-phosphorus').textContent = physWeightP;
-  }
-  if (physWeightK > 0) {
-    document.getElementById('phys-ga-potassium').textContent = physWeightK;
-  }
-
-  if (physWeightN > 0) {
     document.getElementById('phys-field-nitrogen').textContent = (physWeightN / 1000 * inputData.fieldArea).toFixed(1);
   }
   if (physWeightP > 0) {
+    document.getElementById('phys-ga-phosphorus').textContent = physWeightP;
     document.getElementById('phys-field-phosphorus').textContent = (physWeightP / 1000 * inputData.fieldArea).toFixed(1);
   }
   if (physWeightK > 0) {
+    document.getElementById('phys-ga-potassium').textContent = physWeightK;
     document.getElementById('phys-field-potassium').textContent = (physWeightK / 1000 * inputData.fieldArea).toFixed(1);
   }
-
   // ! Расчет стоимости удобрений
 
   const priceGaN =
