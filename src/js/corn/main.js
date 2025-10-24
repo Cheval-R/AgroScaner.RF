@@ -101,8 +101,17 @@ function GetPluralValues(count, rules) {
 }
 
 export function PrintResult(data) {
-  const clearData = RemoveRepeatingGroups(data, 5)
-  const todayIndex = clearData.date.findIndex((element) => element === getFormattedToday());
+  const clearData = RemoveRepeatingGroups(data, 5);
+  const todayDate = getFormattedToday();
+  let todayIndex;
+  if (CompareDates(clearData.date.at(-1), todayDate) <= 0)
+    todayIndex = clearData.date.length - 1;
+  else
+    todayIndex = clearData.date.findIndex((element) => element === todayDate);
+
+  console.log('clearData.date.length - 1', clearData.date.length - 1);
+  console.log('clearData.date', clearData.date);
+  console.log('todayIndex', todayIndex);
 
   PrintEffectiveTemp(clearData, OptimalHarvestingTiming(clearData), todayIndex);
 
@@ -113,7 +122,21 @@ function getFormattedToday() {
   const day = String(now.getDate()).padStart(2, '0');
   const month = String(now.getMonth() + 1).padStart(2, '0');
   const year = now.getFullYear();
+  console.log('`${day}.${month}.${year}`', `${day}.${month}.${year}`);
+
   return `${day}.${month}.${year}`;
+}
+
+function CompareDates(date1, date2) {
+  const [d1, m1, y1] = date1.split('.').map(Number);
+  const [d2, m2, y2] = date2.split('.').map(Number);
+
+  const dt1 = new Date(y1, m1 - 1, d1);
+  const dt2 = new Date(y2, m2 - 1, d2);
+
+  if (dt1 < dt2) return -1;
+  if (dt1 > dt2) return 1;
+  return 0;
 }
 
 function RemoveRepeatingGroups(data, limit = 10) {
@@ -155,7 +178,9 @@ function PrintEffectiveTemp(totalData, optimalHarvestingTiming, todayIndex) {
   if (!byPeriod.checked) {
     introWord = 'Со дня сева'
   }
-  document.getElementById('output').style.display = 'block'
+  document.getElementById('output').style.display = 'block';
+  console.log('totalData.temp[todayIndex]', totalData.temp);
+
   document.getElementById('output__today').innerHTML =
     `
     ${introWord} <u>${totalData.date[0]}</u> до <u> ${totalData.date[todayIndex]}</u> за ${GetPluralValues(totalData.date.length, ["день", "дня", "дней"])} накопится <b>${totalData.temp[todayIndex].toFixed(0)}°C</b> эффективных температур.`;
