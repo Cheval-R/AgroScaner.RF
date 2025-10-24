@@ -1,4 +1,4 @@
-export let activeSubstance = [
+export let Fertilizers = [
 	{
 		name: "Нет",
 		nitrogen: 0,

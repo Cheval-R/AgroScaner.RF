@@ -1,4 +1,4 @@
-export let removal = [
+export let Crops = [
 	{
 		name: "Пшеница яровая",
 		nitrogen: 3.5,

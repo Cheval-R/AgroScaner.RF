@@ -1,4 +1,4 @@
-export const mainPage = [
+export const MainPageInputWrapper = [
   `<table class="information__table gradation" data-table="first">
             <thead>
               <tr>
@@ -185,7 +185,7 @@ export const mainPage = [
           </table>`
 ];
 
-export const clientPage = [
+export const ClientPageInputWrapper = [
   `<table class="information__table field-info" data-table="first">
             <thead>
               <tr>
@@ -276,7 +276,6 @@ export const clientPage = [
                 </td>
                 <td>
                   <select id="nitrogen">
-                    <option value="" disabled selected hidden></option>
                     <option>Нет</option>
                     <option>Аммиачная селитра</option>
                     <option>Сульфонитрат (30:7)</option>
@@ -297,7 +296,6 @@ export const clientPage = [
                 </td>
                 <td>
                   <select id="phosphorus">
-                    <option value="" disabled selected hidden></option>
                     <option>Нет</option>
                     <option>Аммофос(52)</option>
                     <option>Аммофос(46)</option>
@@ -319,7 +317,6 @@ export const clientPage = [
                 </td>
                 <td>
                   <select id="potassium">
-                    <option value="" disabled selected hidden></option>
                     <option>Нет</option>
                     <option>Калий хлористый</option>
                     <option>Калий сернокислый</option>

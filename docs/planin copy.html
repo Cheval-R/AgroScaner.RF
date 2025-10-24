@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Калькулятор удобрений КФХ &laquo;Планин&raquo;</title>
+  <link rel="shortcut icon" type="image/png" href="./img/favicon.png" />
+
+  <link rel="stylesheet" href="./css/calculator.min.css">
+  <script type="module" src="./js/calculator.min.js"></script>
+</head>
+
+<body>
+  <header class="header">
+    <div class="container container--fullscreen">
+      <div class="header__wrapper">
+        <div class="logo">
+          <a class="logo__link" href="https://tatagrohimservis.ru/">
+            <img class="logo__image" src="./img/logo-tahs.png" alt="Логотип">
+          </a>
+        </div>
+        <nav class="nav">
+          <ul class="nav__list">
+            <li class="nav__item">
+              <a class="nav__link" href="./index.html">Калькулятор удобрений</a>
+            </li>
+            <li class="nav__item">
+              <a class="nav__link" href="./corn-harvesting.html">Расчёт срока уборки силоса</a>
+            </li>
+          </ul>
+        </nav>
+        <div class="logo logo-lab">
+          <a class="logo__link" href="./index.html  ">
+            <img class="logo__image" src="./img/logo-lab.png" alt="Логотип">
+          </a>
+        </div>
+      </div>
+    </div>
+  </header>
+  <main>
+    <section class="section companies">
+      <div class="container container--fullscreen">
+        <div class="companies__links">
+          <div class="companies__wrapper">
+            <a class="button companies__button" href="./pecherskoe-stavropol.html">АО&nbsp;&laquo;Печерское&raquo;</a>
+            <a class="button companies__button companies__button--active" href="./planin.html">КФХ &laquo;Планин&raquo;</a>
+            <a class="button companies__button" href="./nur.html">ООО &laquo;НУР&raquo;</a>
+            <a class="button companies__button" href="./duslyk.html">ООО &laquo;Дуслык&raquo;</a>
+            <a class="button companies__button" href="./anyak.html">ООО &laquo;Аняк&raquo;</a>
+            <a class="button companies__button" href="./tugan-yak.html">ООО &laquo;Туган Як&raquo;</a>
+          </div>
+        </div>
+      </div>
+    </section>
+    <h1 class="page-title">Калькулятор доз внесения и стоимости удобрений</h1>
+    <section class="section calculator">
+      <div class="container container--fullscreen">
+        <table class="calculator__table">
+          <thead>
+            <th class="calculator__header calculator__header--title" colspan="2">Азот</th>
+            <th class="calculator__header calculator__header--title" colspan="2">Фосфор</th>
+            <th class="calculator__header calculator__header--title" colspan="2">Калий</th>
+            <th class="calculator__header calculator__header--title">Общее</th>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="calculator__header calculator__header--main">Физ. вес</td>
+              <td class="calculator__header calculator__header--main">Стоимость</td>
+              <td class="calculator__header calculator__header--main">Физ. вес</td>
+              <td class="calculator__header calculator__header--main">Стоимость</td>
+              <td class="calculator__header calculator__header--main">Физ. вес</td>
+              <td class="calculator__header calculator__header--main">Стоимость</td>
+              <td class="calculator__header calculator__header--main">Стоимость</td>
+            </tr>
+            <tr>
+              <td class="calculator__header calculator__header--ga">кг/га</td>
+              <td class="calculator__header calculator__header--ga">руб/га</td>
+              <td class="calculator__header calculator__header--ga">кг/га</td>
+              <td class="calculator__header calculator__header--ga">руб/га</td>
+              <td class="calculator__header calculator__header--ga">кг/га</td>
+              <td class="calculator__header calculator__header--ga">руб/га</td>
+              <td class="calculator__header calculator__header--ga">руб/га</td>
+            </tr>
+            <tr>
+              <td id="phys-ga-nitrogen">0</td>
+              <td id="price-ga-nitrogen">0</td>
+              <td id="phys-ga-phosphorus">0</td>
+              <td id="price-ga-phosphorus">0</td>
+              <td id="phys-ga-potassium">0</td>
+              <td id="price-ga-potassium">0</td>
+              <td id="price-ga-total">0</td>
+            </tr>
+            <tr>
+              <td class="calculator__header calculator__header--ga">тонн/поле</td>
+              <td class="calculator__header calculator__header--ga">руб/поле</td>
+              <td class="calculator__header calculator__header--ga">тонн/поле</td>
+              <td class="calculator__header calculator__header--ga">руб/поле</td>
+              <td class="calculator__header calculator__header--ga">тонн/поле</td>
+              <td class="calculator__header calculator__header--ga">руб/поле</td>
+              <td class="calculator__header calculator__header--ga">руб/поле</td>
+            </tr>
+            <tr>
+              <td id="phys-field-nitrogen">0</td>
+              <td id="price-field-nitrogen">0</td>
+              <td id="phys-field-phosphorus">0</td>
+              <td id="price-field-phosphorus">0</td>
+              <td id="phys-field-potassium">0</td>
+              <td id="price-field-potassium">0</td>
+              <td id="price-field-total">0</td>
+            </tr>
+          </tbody>
+        </table>
+        <button class="button calculator__button" id="calculate">Рассчитать</button>
+      </div>
+    </section>
+    <section class="section information">
+      <div class="container">
+        <div class="information__wrapper">
+          <table id="input-table" class="information__table fertilizer" border="1" cellpadding="5" cellspacing="0">
+            <thead>
+              <tr>
+                <th colspan="2">Удобрения</th>
+                <th>№ поля</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Название</td>
+                <td>Стоимость</td>
+                <td>
+                  <select id="fields">
+                    <option>202 га</option>
+                    <option>202 га (3)</option>
+                    <option>72 га</option>
+                  </select>
+                </td>
+              </tr>
+              <tr>
+                <td colspan="2">Азотное</td>
+                <td>Площадь</td>
+              </tr>
+              <tr>
+                <td>
+                  <select id="nitrogen">
+                    <option>Нет</option>
+                    <option>Аммиачная селитра</option>
+                    <option>Сульфонитрат (30:7)</option>
+                    <option>Сульфонитрат (26:13)</option>
+                    <option>КАС(28)</option>
+                    <option>Карбамид</option>
+                    <option>Сульфат аммония</option>
+                    <option>Безводный аммиак</option>
+                  </select>
+                </td>
+                <td class="fertilizer__price">
+                  <input id="nitrogen-price" type="number" min="0">
+                </td>
+                <td><input id="field-area" name="" id="" type="text"></td>
+              </tr>
+              <tr>
+                <td colspan="2">Фосфорное</td>
+                <td>Культура</td>
+              </tr>
+              <tr>
+                <td>
+                  <select id="phosphorus">
+                    <option>Нет</option>
+                    <option>Аммофос(52)</option>
+                    <option>Аммофос(46)</option>
+                    <option>Диаммофоска</option>
+                    <option>Азофоска(15)</option>
+                    <option>Азофоска(16)</option>
+                    <option>NPKS(4)</option>
+                    <option>NPKS(8)</option>
+                    <option>Фосмука</option>
+                  </select>
+                </td>
+                <td class="fertilizer__price">
+                  <input id="phosphorus-price" type="number" min="0">
+                </td>
+                <td>
+                  <select id="crop">
+                    <option>Пшеница яровая</option>
+                    <option>Пшеница озимая</option>
+                    <option>Рожь озимая</option>
+                    <option>Ячмень яровой</option>
+                    <option>Овес</option>
+                    <option>Кукуруза на зерно</option>
+                    <option>Кукуруза на силос</option>
+                    <option>Рапс яровой</option>
+                    <option>Горчица</option>
+                    <option>Соя</option>
+                    <option>Картофель</option>
+                    <option>Люцерна</option>
+                    <option>Просо</option>
+                    <option>Гречиха</option>
+                    <option>Горох</option>
+                    <option>Вика</option>
+                    <option>Подсолнечник</option>
+                    <option>Свёкла сахарная</option>
+                    <option>Кормовая свекла</option>
+                    <option>Пар</option>
+                    <option>Турнепс</option>
+                    <option>Кормовая морковь</option>
+                    <option>Столовая свекла</option>
+                    <option>Вика с овсом</option>
+                    <option>Клевер с тимофеевкой</option>
+                    <option>Эспарцет</option>
+                    <option>Сераделла</option>
+                    <option>Естественные пастбища</option>
+                    <option>Клевер</option>
+                    <option>Тимофеевка</option>
+                    <option>Подсолнечник з/м</option>
+                    <option>Горох с овсом з/м</option>
+                    <option>Вика с овсом з/м</option>
+                    <option>Рожь озимая з/м</option>
+                    <option>Рапс з/м</option>
+                    <option>Капуста белокочанная</option>
+                    <option>Томаты</option>
+                    <option>Огурцы</option>
+                    <option>Лук</option>
+                    <option>Лён</option>
+                    <option>Плодовые и ягодные</option>
+                    <option>Конопля</option>
+                  </select>
+                </td>
+              </tr>
+              <tr>
+                <td colspan="2">Калийное</td>
+                <td>Урожай</td>
+              </tr>
+              <tr>
+                <td>
+                  <select id="potassium">
+                    <option>Нет</option>
+                    <option>Калий хлористый</option>
+                    <option>Калий сернокислый</option>
+                  </select>
+                </td>
+                <td class="fertilizer__price">
+                  <input id="potassium-price" type="number" min="0">
+                </td>
+                <td><input id="harvest" type="number"></td>
+              </tr>
+            </tbody>
+          </table>
+
+        </div>
+      </div>
+    </section>
+  </main>
+</body>
+
+</html>
