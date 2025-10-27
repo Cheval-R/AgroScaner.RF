@@ -38,9 +38,9 @@
   }
 }
 
-// ! Information
+// ! calculator-params
 
-.information {
+.calculator-params {
   display: flex;
   margin-bottom: 20px;
   &__wrapper {
@@ -276,7 +276,7 @@
   // body,
   input,
   select,
-  .information__table,
+  .calculator-params__table,
   .calculator__header {
     font-size: clamp(10px, 1.6vw, 12px);
   }
@@ -300,7 +300,7 @@
     flex-wrap: wrap;
   }
 
-  .information {
+  .calculator-params {
     &__wrapper {
       grid-template-areas:
         "first-table"
@@ -409,7 +409,7 @@
 }
 
 @media (max-width: 450px) {
-  .information__table,
+  .calculator-params__table,
   select,
   input {
     font-size: clamp(9px, 1.6vw, 12px);

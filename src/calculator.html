@@ -55,197 +55,195 @@
         </ul>
       </div>
     </section>
-    <section class="information section">
+    <section class="calculator-params section" id="calculator-params">
       <h2 class="visually-hidden">Блок вводимой информации </h2>
-      <div class="container">
-        <div class="information__wrapper information__wrapper--manual" id="input-wrapper">
-          <table class="information__table gradation" data-table="first">
-            <thead>
-              <tr>
-                <th colspan="4">Градация показателей</th>
-              </tr>
-              <tr>
-                <th>Содержание</th>
-                <th>Орг. в-во, %</th>
-                <th>Фосфор, мг/кг</th>
-                <th>Калий, ммоль+/кг</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr class="gradation__low">
-                <td>Низкое</td>
-                <td>&lt; 2,9</td>
-                <td>&lt; 20</td>
-                <td>&lt; 6</td>
-              </tr>
-              <tr class="gradation__optimal">
-                <td>Оптимальное</td>
-                <td>2,9&nbsp;— 6,2</td>
-                <td>20&nbsp;— 40</td>
-                <td>6&nbsp;— 12</td>
-              </tr>
-              <tr class="gradation__high">
-                <td>Повышенное</td>
-                <td>&gt; 6,2</td>
-                <td>&gt; 40</td>
-                <td>&gt; 12</td>
-              </tr>
-            </tbody>
-          </table>
+      <div class="container calculator-params__wrapper calculator-params__wrapper--manual">
+        <table class="calculator-params__table gradation" data-table="first">
+          <thead>
+            <tr>
+              <th colspan="4">Градация показателей</th>
+            </tr>
+            <tr>
+              <th>Содержание</th>
+              <th>Орг. в-во, %</th>
+              <th>Фосфор, мг/кг</th>
+              <th>Калий, ммоль+/кг</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="gradation__low">
+              <td>Низкое</td>
+              <td>&lt; 2,9</td>
+              <td>&lt; 20</td>
+              <td>&lt; 6</td>
+            </tr>
+            <tr class="gradation__optimal">
+              <td>Оптимальное</td>
+              <td>2,9&nbsp;— 6,2</td>
+              <td>20&nbsp;— 40</td>
+              <td>6&nbsp;— 12</td>
+            </tr>
+            <tr class="gradation__high">
+              <td>Повышенное</td>
+              <td>&gt; 6,2</td>
+              <td>&gt; 40</td>
+              <td>&gt; 12</td>
+            </tr>
+          </tbody>
+        </table>
 
-          <table class="information__table fertilizer" data-table="second">
-            <thead>
-              <tr>
-                <th colspan="4">Элементы питания</th>
-              </tr>
-              <tr>
-                <th>Элемент</th>
-                <th>Сод-е, мг/кг</th>
-                <th>Удобрение</th>
-                <th>Стоимость</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>
-                  <p>Азот</p>
-                </td>
-                <td>
-                  <input id="n-value" type="number" min="0" value="0">
-                </td>
-                <td>
-                  <select id="nitrogen">
-                    <option>Нет</option>
-                    <option>Аммиачная селитра</option>
-                    <option>Сульфонитрат (30:7)</option>
-                    <option>Сульфонитрат (26:13)</option>
-                    <option>КАС(28)</option>
-                    <option>Карбамид</option>
-                    <option>Сульфат аммония</option>
-                    <option>Безводный аммиак</option>
-                  </select>
-                </td>
-                <td class="fertilizer__price">
-                  <input id="nitrogen-price" type="number" min="0">
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <p>Фосфор</p>
-                </td>
-                <td>
-                  <input id="p-value" type="number" min="0" value="0">
-                </td>
-                <td>
-                  <select id="phosphorus">
-                    <option>Нет</option>
-                    <option>Аммофос(52)</option>
-                    <option>Аммофос(46)</option>
-                    <option>Диаммофоска</option>
-                    <option>Азофоска(15)</option>
-                    <option>Азофоска(16)</option>
-                    <option>NPKS(4)</option>
-                    <option>NPKS(8)</option>
-                    <option>Фосмука</option>
-                  </select>
-                </td>
-                <td class="fertilizer__price">
-                  <input id="phosphorus-price" type="number" min="0">
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <p>Калий</p>
-                </td>
-                <td>
-                  <input id="k-value" type="number" min="0" value="0">
-                </td>
-                <td>
-                  <select id="potassium">
-                    <option>Нет</option>
-                    <option>Калий хлористый</option>
-                    <option>Калий сернокислый</option>
-                  </select>
-                </td>
-                <td class="fertilizer__price">
-                  <input id="potassium-price" type="number" min="0">
-                </td>
-              </tr>
-            </tbody>
-          </table>
+        <table class="calculator-params__table fertilizer" data-table="second">
+          <thead>
+            <tr>
+              <th colspan="4">Элементы питания</th>
+            </tr>
+            <tr>
+              <th>Элемент</th>
+              <th>Сод-е, мг/кг</th>
+              <th>Удобрение</th>
+              <th>Стоимость</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <p>Азот</p>
+              </td>
+              <td>
+                <input id="n-value" type="number" min="0" value="0">
+              </td>
+              <td>
+                <select id="nitrogen">
+                  <option>Нет</option>
+                  <option>Аммиачная селитра</option>
+                  <option>Сульфонитрат (30:7)</option>
+                  <option>Сульфонитрат (26:13)</option>
+                  <option>КАС(28)</option>
+                  <option>Карбамид</option>
+                  <option>Сульфат аммония</option>
+                  <option>Безводный аммиак</option>
+                </select>
+              </td>
+              <td class="fertilizer__price">
+                <input id="nitrogen-price" type="number" min="0">
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <p>Фосфор</p>
+              </td>
+              <td>
+                <input id="p-value" type="number" min="0" value="0">
+              </td>
+              <td>
+                <select id="phosphorus">
+                  <option>Нет</option>
+                  <option>Аммофос(52)</option>
+                  <option>Аммофос(46)</option>
+                  <option>Диаммофоска</option>
+                  <option>Азофоска(15)</option>
+                  <option>Азофоска(16)</option>
+                  <option>NPKS(4)</option>
+                  <option>NPKS(8)</option>
+                  <option>Фосмука</option>
+                </select>
+              </td>
+              <td class="fertilizer__price">
+                <input id="phosphorus-price" type="number" min="0">
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <p>Калий</p>
+              </td>
+              <td>
+                <input id="k-value" type="number" min="0" value="0">
+              </td>
+              <td>
+                <select id="potassium">
+                  <option>Нет</option>
+                  <option>Калий хлористый</option>
+                  <option>Калий сернокислый</option>
+                </select>
+              </td>
+              <td class="fertilizer__price">
+                <input id="potassium-price" type="number" min="0">
+              </td>
+            </tr>
+          </tbody>
+        </table>
 
-          <table class="information__table field-info" data-table="third">
-            <thead>
-              <tr>
-                <th>
-                  Площадь поля, га
-                </th>
-                <th>
-                  Культура
-                </th>
-                <th>
-                  Планируемый урожай, т/га
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>
-                  <input id="field-area" type="number" min="0" value="0">
-                </td>
-                <td>
-                  <select id="crop">
-                    <option>Пшеница яровая</option>
-                    <option>Пшеница озимая</option>
-                    <option>Рожь озимая</option>
-                    <option>Ячмень яровой</option>
-                    <option>Овес</option>
-                    <option>Кукуруза на зерно</option>
-                    <option>Кукуруза на силос</option>
-                    <option>Рапс яровой</option>
-                    <option>Горчица</option>
-                    <option>Соя</option>
-                    <option>Картофель</option>
-                    <option>Люцерна</option>
-                    <option>Просо</option>
-                    <option>Гречиха</option>
-                    <option>Горох</option>
-                    <option>Вика</option>
-                    <option>Подсолнечник</option>
-                    <option>Свёкла сахарная</option>
-                    <option>Кормовая свекла</option>
-                    <option>Пар</option>
-                    <option>Турнепс</option>
-                    <option>Кормовая морковь</option>
-                    <option>Столовая свекла</option>
-                    <option>Вика с овсом</option>
-                    <option>Клевер с тимофеевкой</option>
-                    <option>Эспарцет</option>
-                    <option>Сераделла</option>
-                    <option>Естественные пастбища</option>
-                    <option>Клевер</option>
-                    <option>Тимофеевка</option>
-                    <option>Подсолнечник з/м</option>
-                    <option>Горох с овсом з/м</option>
-                    <option>Вика с овсом з/м</option>
-                    <option>Рожь озимая з/м</option>
-                    <option>Рапс з/м</option>
-                    <option>Капуста белокочанная</option>
-                    <option>Томаты</option>
-                    <option>Огурцы</option>
-                    <option>Лук</option>
-                    <option>Лён</option>
-                    <option>Плодовые и ягодные</option>
-                    <option>Конопля</option>
-                  </select>
-                </td>
-                <td>
-                  <input id="harvest" type="number">
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+        <table class="calculator-params__table field-info" data-table="third">
+          <thead>
+            <tr>
+              <th>
+                Площадь поля, га
+              </th>
+              <th>
+                Культура
+              </th>
+              <th>
+                Планируемый урожай, т/га
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <input id="field-area" type="number" min="0" value="0">
+              </td>
+              <td>
+                <select id="crop">
+                  <option>Пшеница яровая</option>
+                  <option>Пшеница озимая</option>
+                  <option>Рожь озимая</option>
+                  <option>Ячмень яровой</option>
+                  <option>Овес</option>
+                  <option>Кукуруза на зерно</option>
+                  <option>Кукуруза на силос</option>
+                  <option>Рапс яровой</option>
+                  <option>Горчица</option>
+                  <option>Соя</option>
+                  <option>Картофель</option>
+                  <option>Люцерна</option>
+                  <option>Просо</option>
+                  <option>Гречиха</option>
+                  <option>Горох</option>
+                  <option>Вика</option>
+                  <option>Подсолнечник</option>
+                  <option>Свёкла сахарная</option>
+                  <option>Кормовая свекла</option>
+                  <option>Пар</option>
+                  <option>Турнепс</option>
+                  <option>Кормовая морковь</option>
+                  <option>Столовая свекла</option>
+                  <option>Вика с овсом</option>
+                  <option>Клевер с тимофеевкой</option>
+                  <option>Эспарцет</option>
+                  <option>Сераделла</option>
+                  <option>Естественные пастбища</option>
+                  <option>Клевер</option>
+                  <option>Тимофеевка</option>
+                  <option>Подсолнечник з/м</option>
+                  <option>Горох с овсом з/м</option>
+                  <option>Вика с овсом з/м</option>
+                  <option>Рожь озимая з/м</option>
+                  <option>Рапс з/м</option>
+                  <option>Капуста белокочанная</option>
+                  <option>Томаты</option>
+                  <option>Огурцы</option>
+                  <option>Лук</option>
+                  <option>Лён</option>
+                  <option>Плодовые и ягодные</option>
+                  <option>Конопля</option>
+                </select>
+              </td>
+              <td>
+                <input id="harvest" type="number">
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </section>
     <section class="section calculator">

@@ -1,10 +1,10 @@
 import { Crops } from './crops.js';
 import { Fertilizers } from './fertilizer.js';
 import { Clients } from './fields.js';
-import { MainPageInputWrapper, ClientPageInputWrapper } from "./blocks.js";
+import { calculatorParamsContent } from "./blocks.js";
 
 let
-  inputWrapper,
+  calculatorParams,
   fieldsList = '',
   fieldSelect,
   areaInput,
@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', function () {
       Calculate(inputData);
     });
 
-  document.getElementById('input-wrapper').addEventListener('change', function (event) {
+  document.getElementById('calculator-params').addEventListener('change', function (event) {
     if (["field-area",
       "harvest",
       "nitrogen-price",
@@ -135,7 +135,7 @@ function ChangeCompany(newClient) {
     return
   }
 
-  FillInputWrapper(manualPageFlag ? MainPageInputWrapper : ClientPageInputWrapper);
+  FillInputWrapper();
   BindInput();
 
   let newClientName = '';
@@ -413,7 +413,7 @@ function SetZeroValueInput(input) {
 
 function BindInput() {
   areaInput = document.getElementById('field-area');
-  inputWrapper = document.getElementById('input-wrapper');
+  calculatorParams = document.getElementById('calculator-params');
   nitrogenSelect = document.getElementById('nitrogen');
   phosphorusSelect = document.getElementById('phosphorus');
   potassiumSelect = document.getElementById('potassium');
@@ -432,21 +432,20 @@ function BindInput() {
     fieldSelect = document.getElementById('fields');
   }
   else {
-    document.getElementById('n-value').addEventListener('change', e => PaintTheCell(2.9, 6.2, this))
-    document.getElementById('p-value').addEventListener('change', e => PaintTheCell(20, 40, this))
-    document.getElementById('k-value').addEventListener('change', e => PaintTheCell(6, 12, this))
+    document.getElementById('n-value').addEventListener('change', e => PaintTheCell(2.9, 6.2, e.target))
+    document.getElementById('p-value').addEventListener('change', e => PaintTheCell(20, 40, e.target))
+    document.getElementById('k-value').addEventListener('change', e => PaintTheCell(6, 12, e.target))
   }
 }
 
-function FillInputWrapper(tablesObject) {
-  if (manualPageFlag)
-    inputWrapper.classList.add('information__wrapper--manual');
-  else
-    inputWrapper.classList.remove('information__wrapper--manual');
+function FillInputWrapper() {
+  const calculatorParamsWrapper = calculatorParams.querySelector('.calculator-params__wrapper');
+  let classes = manualPageFlag ? ['container', 'calculator-params__wrapper', 'calculator-params__wrapper--manual'] : ['container', 'calculator-params__wrapper'];
+  let content = manualPageFlag ? calculatorParamsContent.mainPage : calculatorParamsContent.clientPage;
 
-  inputWrapper.textContent = '';
-
-  tablesObject.forEach(element => {
-    inputWrapper.innerHTML += element;
-  });
+  calculatorParams.removeChild(calculatorParamsWrapper);
+  const wrapper = document.createElement('div')
+  wrapper.classList.add(...classes)
+  wrapper.innerHTML = content;
+  calculatorParams.appendChild(wrapper)
 }
