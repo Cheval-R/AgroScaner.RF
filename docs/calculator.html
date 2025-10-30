@@ -26,7 +26,7 @@
     </div>
   </header>
   <main class="main">
-    <h1 class="page-title">Калькулятор доз внесения и стоимости удобрений <span id="company-name"></span></h1>
+    <h1 class="page-title">Калькулятор доз внесения и стоимости удобрений <span id="client-name"></span></h1>
     <section class="clients section">
       <div class="container">
         <h2 class="visually-hidden">Список клиентов</h2>
@@ -110,7 +110,7 @@
                 <p>Азот</p>
               </td>
               <td>
-                <input id="n-value" type="number" min="0" value="0">
+                <input id="nitrogen-value" type="number" min="0" value="0">
               </td>
               <td>
                 <select id="nitrogen">
@@ -133,7 +133,7 @@
                 <p>Фосфор</p>
               </td>
               <td>
-                <input id="p-value" type="number" min="0" value="0">
+                <input id="phosphorus-value" type="number" min="0" value="0">
               </td>
               <td>
                 <select id="phosphorus">
@@ -157,7 +157,7 @@
                 <p>Калий</p>
               </td>
               <td>
-                <input id="k-value" type="number" min="0" value="0">
+                <input id="potassium-value" type="number" min="0" value="0">
               </td>
               <td>
                 <select id="potassium">
@@ -244,6 +244,8 @@
             </tr>
           </tbody>
         </table>
+
+        <button class="button calculate-button" id="calculate-button">Рассчитать</button>
       </div>
     </section>
     <section class="section calculator">
@@ -311,7 +313,6 @@
             </div>
           </div>
         </div>
-        <button class="button calculator__button" id="calculate">Рассчитать</button>
       </div>
     </section>
   </main>

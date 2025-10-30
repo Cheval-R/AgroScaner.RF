@@ -31,6 +31,7 @@
   }
   &__button {
     display: block;
+    width: 100%;
     // padding: 2px 5px;
     &--active {
       background-color: red;
@@ -47,11 +48,14 @@
     display: grid;
     gap: 15px;
     justify-content: space-between;
-    grid-template-areas: "first-table second-table";
+    grid-template-areas:
+      "first-table second-table"
+      "calculate-button calculate-button";
     &--manual {
       grid-template-areas:
         "first-table second-table"
-        "third-table third-table";
+        "third-table third-table"
+        "calculate-button calculate-button";
     }
   }
   &__table {
@@ -226,16 +230,17 @@
       line-height: 2;
     }
   }
-  &__button {
-    display: block;
-    font-size: 16px;
-    text-transform: uppercase;
-    // line-height: 2;
-    margin: 0 auto;
-    text-align: center;
-    padding: 10px 25px;
-    width: 50%;
-  }
+}
+.calculate-button {
+  grid-area: calculate-button;
+  display: block;
+  // font-size: 16px;
+  text-transform: uppercase;
+  // line-height: 2;
+  margin: 0 auto;
+  text-align: center;
+  padding: 0px 25px;
+  // width: 100%;
 }
 
 .return-link {
@@ -304,12 +309,14 @@
     &__wrapper {
       grid-template-areas:
         "first-table"
-        "second-table";
+        "second-table"
+        "calculate-button";
       &--manual {
         grid-template-areas:
           "first-table"
           "second-table"
-          "third-table";
+          "third-table"
+          "calculate-button";
       }
     }
 
@@ -383,7 +390,7 @@
 
   .main-page .input-column {
     grid-template-areas:
-      "n-value p-value k-value"
+      "nitrogen-value phosphorus-value potassium-value"
       "area harvest crop"
       "nitro phos pottas";
     grid-template-columns: repeat(3, 1fr);

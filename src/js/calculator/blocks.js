@@ -1,4 +1,4 @@
-export const calculatorParamsContent = {
+export const paramsTemplates = {
   mainPage: `<table class="calculator-params__table gradation" data-table="first">
           <thead>
             <tr>
@@ -51,7 +51,7 @@ export const calculatorParamsContent = {
                 <p>Азот</p>
               </td>
               <td>
-                <input id="n-value" type="number" min="0" value="0">
+                <input id="nitrogen-value" type="number" min="0" value="0">
               </td>
               <td>
                 <select id="nitrogen">
@@ -74,7 +74,7 @@ export const calculatorParamsContent = {
                 <p>Фосфор</p>
               </td>
               <td>
-                <input id="p-value" type="number" min="0" value="0">
+                <input id="phosphorus-value" type="number" min="0" value="0">
               </td>
               <td>
                 <select id="phosphorus">
@@ -98,7 +98,7 @@ export const calculatorParamsContent = {
                 <p>Калий</p>
               </td>
               <td>
-                <input id="k-value" type="number" min="0" value="0">
+                <input id="potassium-value" type="number" min="0" value="0">
               </td>
               <td>
                 <select id="potassium">
@@ -184,7 +184,8 @@ export const calculatorParamsContent = {
               </td>
             </tr>
           </tbody>
-        </table> `,
+        </table> 
+        <button class="button calculate-button" id="calculate-button">Рассчитать</button>`,
   // container calculator-params__wrapper
   clientPage: `<table class="calculator-params__table field-info" data-table="first">
             <thead>
@@ -327,5 +328,6 @@ export const calculatorParamsContent = {
                 </td>
               </tr>
             </tbody>
-          </table>`
+          </table>
+        <button class="button calculate-button" id="calculate-button">Рассчитать</button>`
 }
