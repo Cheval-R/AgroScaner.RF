@@ -40,16 +40,7 @@ document.addEventListener('DOMContentLoaded', function () {
       Calculate(inputData);
     });
 
-  document.getElementById('calculator-params').addEventListener('change', function (event) {
-    if (["field-area",
-      "harvest",
-      "nitrogen-price",
-      "phosphorus-price",
-      "potassium-price"
-    ].includes(event.target.id)) {
-      SetZeroValueInput(event.target);
-    }
-  })
+
 });
 
 function InitInputData() {
@@ -186,13 +177,12 @@ function GetInputData(inputData) {
 
 // ? Получение данных о выносе культуры
 function GetCropData(inputData) {
-  Crops.forEach(function (Crops) {
-    if (Crops.name === inputData.crop) {
-      inputData.cropNitrogen = Crops.nitrogen;
-      inputData.cropPhosphorus = Crops.phosphorus;
-      inputData.cropPotassium = Crops.potassium;
-    }
-  });
+  const crop = Crops.find(c => c.name === inputData.crop);
+  if (crop) {
+    inputData.cropNitrogen = crop.nitrogen;
+    inputData.cropPhosphorus = crop.phosphorus;
+    inputData.cropPotassium = crop.potassium;
+  }
 }
 
 // ? Получение данных поля
@@ -204,13 +194,12 @@ function GetFieldCoefficients(inputData) {
     kValue = document.getElementById('k-value').value;
   }
   else {
-    fieldsList.forEach(function (field) {
-      if (inputData.fieldName === field.name) {
-        nValue = field.organic;
-        pValue = field.phosphorus;
-        kValue = field.potassium;
-      }
-    });
+    const field = fieldsList.find(f => inputData.fieldName === f.name);
+    if (field) {
+      nValue = field.organic;
+      pValue = field.phosphorus;
+      kValue = field.potassium;
+    }
   }
 
   const { nitrogenCoefficient, phosphorusCoefficient, potassiumCoefficient } =
@@ -258,20 +247,14 @@ function GetNPKCoefficients(nitrogen, phosphorus, potassium) {
 // ! Получение данных об удобрениях
 /** Получение данных об удобрениях */
 function FertilizerCatch(inputData) {
-  Fertilizers.forEach(elem => {
-    // *Азотное удобрение
-    if (inputData.fertilizerN.name === elem.name) {
-      GetFertilizerData(inputData.fertilizerN, elem);
+
+  ['fertilizerN', 'fertilizerP', 'fertilizerK'].forEach(key => {
+    console.log(inputData[key], 'key');
+    const fertilizer = Fertilizers.find(f => f.name === inputData[key].name)
+    if (fertilizer) {
+      GetFertilizerData(inputData[key], fertilizer)
     }
-    // *Фосфорное удобрение
-    if (inputData.fertilizerP.name === elem.name) {
-      GetFertilizerData(inputData.fertilizerP, elem);
-    }
-    // *Калийное удобрение
-    if (inputData.fertilizerK.name === elem.name) {
-      GetFertilizerData(inputData.fertilizerK, elem);
-    }
-  });
+  })
 }
 
 // ? Заполнение ДВ удобрений
@@ -362,11 +345,10 @@ function Calculate(inputData) {
 
 
 function ChangeFertilizerPrice(priceSelector, fertilizerName) {
-  Fertilizers.forEach(fertilizer => {
-    if (fertilizer.name === fertilizerName) {
-      document.getElementById(priceSelector).value = fertilizer.price;
-    }
-  })
+  const fertilizer = Fertilizers.find(f => f.name === fertilizerName);
+  if (fertilizer) {
+    document.getElementById(priceSelector).value = fertilizer.price;
+  }
 }
 
 
@@ -404,6 +386,17 @@ function PaintTheCell(minLimit, maxLimit, element) {
   else if (element.value > maxLimit) {
     element.style.backgroundColor = '#ffc30d';
   }
+
+  document.getElementById('calculator-params').addEventListener('change', function (event) {
+    if (["field-area",
+      "harvest",
+      "nitrogen-price",
+      "phosphorus-price",
+      "potassium-price"
+    ].includes(event.target.id)) {
+      SetZeroValueInput(event.target);
+    }
+  })
 }
 function SetZeroValueInput(input) {
   if (input.value < 0) {
