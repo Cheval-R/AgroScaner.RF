@@ -244,7 +244,11 @@ function GetNPKCoefficients(nitrogen, phosphorus, potassium) {
 		Калий: ${potassiumCoefficient}`
   );
 
-  return { nitrogenCoefficient, phosphorusCoefficient, potassiumCoefficient };
+  return {
+    nitrogen: nitrogenCoefficient,
+    phosphorus: phosphorusCoefficient,
+    potassium: potassiumCoefficient
+  };
 }
 
 // ! Получение данных об удобрениях
