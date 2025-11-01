@@ -9,7 +9,7 @@ export async function CalculateByPeriod(data) {
     if (!weatherData) {
       throw new Error('Не удалось получить погодные данные. Попробуйте позже или измените параметры');
     }
-    console.log('weather', weatherData);
+    // console.log('weather', weatherData);
 
     return CalculateSumEffectiveTemp(weatherData);
   }

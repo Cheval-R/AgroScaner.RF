@@ -17,7 +17,7 @@ Date.prototype.withoutTime = function () {
 
 export async function main() {
   const dateRangeData = GetDate(document.getElementById('start-date').value, document.getElementById('end-date').value);
-  console.log(`dateRangeData /n`, dateRangeData);
+  console.log(`dateRangeData`, dateRangeData);
 
   try {
     if (!byPeriod.checked) {
@@ -59,17 +59,17 @@ function GetDate(startDate, endDate) {
     if (selectedYear === currentYear) {
       const yesterday = new Date();
       yesterday.setDate(yesterday.getDate() - 1);
-      console.log("SELECTED DAY", new Date(data.startDateMinus).withoutTime().getTime())
-      console.log("TODAY", new Date().withoutTime().getTime())
+      // console.log("SELECTED DAY", new Date(data.startDateMinus).withoutTime().getTime())
+      // console.log("TODAY", new Date().withoutTime().getTime())
       if (new Date(data.startDateMinus).withoutTime().getTime() < new Date().withoutTime().getTime()) {
         data.endDateMinus = yesterday.toLocaleDateString('en-CA', {
           year: 'numeric',
           month: '2-digit',
           day: '2-digit'
         });
-        console.log('endDateMinus', data.endDateMinus)
+        // console.log('endDateMinus', data.endDateMinus)
       }
-      console.log('check')
+      // console.log('check')
     }
     else {
       data.endDateMinus = `${selectedYear}-12-31`;
@@ -111,9 +111,9 @@ export function PrintResult(data) {
   else
     todayIndex = clearData.date.findIndex((element) => element === todayDate);
 
-  console.log('clearData.date.length - 1', clearData.date.length - 1);
-  console.log('clearData.date', clearData.date);
-  console.log('todayIndex', todayIndex);
+  // console.log('clearData.date.length - 1', clearData.date.length - 1);
+  // console.log('clearData.date', clearData.date);
+  // console.log('todayIndex', todayIndex);
 
   PrintEffectiveTemp(clearData, OptimalHarvestingTiming(clearData), todayIndex);
 
@@ -124,7 +124,7 @@ function getFormattedToday() {
   const day = String(now.getDate()).padStart(2, '0');
   const month = String(now.getMonth() + 1).padStart(2, '0');
   const year = now.getFullYear();
-  console.log('`${day}.${month}.${year}`', `${day}.${month}.${year}`);
+  // console.log('`${day}.${month}.${year}`', `${day}.${month}.${year}`);
 
   return `${day}.${month}.${year}`;
 }
@@ -181,7 +181,7 @@ function PrintEffectiveTemp(totalData, optimalHarvestingTiming, todayIndex) {
     introWord = 'Со дня сева'
   }
   document.getElementById('output').style.display = 'block';
-  console.log('totalData.temp[todayIndex]', totalData.temp);
+  // console.log('totalData.temp[todayIndex]', totalData.temp);
 
   document.getElementById('output__today').innerHTML =
     `
@@ -198,7 +198,7 @@ function PrintEffectiveTemp(totalData, optimalHarvestingTiming, todayIndex) {
       Оптимальные сроки уборки кукурузы на силос <b> не определены</b>
     `;
   } else {
-    console.log('optimalHarvestingTiming', optimalHarvestingTiming)
+    // console.log('optimalHarvestingTiming', optimalHarvestingTiming)
     document.getElementById('output').style.display = 'block'
     document.getElementById('output__optimal').innerHTML =
       `Оптимальный срок уборки кукурузы на силос с <b><u> ${optimalHarvestingTiming.optimalStartDate}</u></b> до <b><u> ${optimalHarvestingTiming.optimalEndDate}</u></b> `;
