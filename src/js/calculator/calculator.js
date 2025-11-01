@@ -1,7 +1,7 @@
-import { Crops } from './crops.js';
-import { Fertilizers } from './fertilizer.js';
-import { Clients } from './fields.js';
-import { paramsTemplates } from "./blocks.js";
+import { Crops, Fertilizers, Clients } from './data.js';
+// import { Fertilizers } from './fertilizer.js';
+// import { Clients } from './fields.js';
+import { paramsTemplates } from "./templates.js";
 
 
 const NPK_LIMITS = {
@@ -9,6 +9,8 @@ const NPK_LIMITS = {
   'phosphorus-value': { min: 20, max: 40 },
   'potassium-value': { min: 6, max: 12 }
 };
+
+const ELEMENTS = ['nitrogen', 'phosphorus', 'potassium'];
 
 const CLIENTS_MAP = {
   'ао «печерское» ставропольский район': Clients.pecherskoeStavropol,
@@ -21,16 +23,17 @@ const CLIENTS_MAP = {
 };
 
 class CalculatorApp {
-  static manualPageFlag = true;
-  static fieldsList = '';
 
   constructor() {
     this.calculateButton;
     this.calculatorParams;
 
+    this.fieldsList;
+
     this.clientNameElem;
     this.currentClient;
 
+    this.isManualPage = true;
   }
 
   init() {
@@ -41,8 +44,14 @@ class CalculatorApp {
   }
 
   bindEvents() {
+    this.onParamsChange();
 
+    this.onParamsFocus();
 
+    this.onDocumentClick();
+  }
+
+  onParamsChange() {
     this.calculatorParams.addEventListener('change', (event) => {
       // * Обнуление при отрицательном вводе
       if (event.target.type === 'number' && event.target.value < 0) {
@@ -59,7 +68,9 @@ class CalculatorApp {
         this.ChangeFertilizerPrice(fertilizerMap[event.target.id], event.target.value)
       }
     })
+  }
 
+  onParamsFocus() {
     this.calculatorParams.addEventListener('focusin', (event) => {
       // * Стирание при фокусе на инпут
       if (event.target.type === 'number') {
@@ -69,26 +80,27 @@ class CalculatorApp {
     this.calculatorParams.addEventListener('focusout', (event) => {
       // ! Перекрашивание содержания NPK
       const limits = NPK_LIMITS[event.target.id]
-      if (CalculatorApp.manualPageFlag && limits) {
+      if (this.isManualPage && limits) {
         this.PaintTheCell(limits.min, limits.max, event.target);
       }
     })
+  }
 
-
+  onDocumentClick() {
     document.addEventListener('click', (event) => {
       const target = event.target;
       if (target.closest('#clients')) {
         const isInactiveClientButton =
           target.classList.contains('clients__button') &&
           !target.classList.contains('clients__button--active');
-        const shouldGoToManual = target.id === 'back-to-manual' && !CalculatorApp.manualPageFlag;
+        const shouldGoToManual = target.id === 'back-to-manual' && !this.isManualPage;
         if (isInactiveClientButton || shouldGoToManual) {
-          CalculatorApp.manualPageFlag = shouldGoToManual;
+          this.isManualPage = shouldGoToManual;
           this.changeClient(target);
         }
       }
       if (target.id === 'calculate-button') {
-        this.mainCalculate(CalculatorApp.fieldsList)
+        this.mainCalculate()
       }
     })
   }
@@ -96,13 +108,13 @@ class CalculatorApp {
   changeClient(newClientButton) {
     this.RenderCalculatorParams();
     let newName = '';
-    if (!CalculatorApp.manualPageFlag) {
+    if (!this.isManualPage) {
       const fieldSelect = document.getElementById('fields');
       const fields = this.getFields(newClientButton.textContent);
       if (!fields) return;
-      CalculatorApp.fieldsList = fields;
-      this.addFields(fields, fieldSelect);
-      this.fillArea(fields, fieldSelect);
+      this.fieldsList = fields;
+      this.addFields(fieldSelect);
+      this.fillArea(fieldSelect);
 
       newName = newClientButton.textContent;
     }
@@ -112,9 +124,9 @@ class CalculatorApp {
   RenderCalculatorParams() {
     const calculatorParamsWrapper = this.calculatorParams.querySelector('.calculator-params__wrapper');
 
-    let classes = CalculatorApp.manualPageFlag ? ['container', 'calculator-params__wrapper', 'calculator-params__wrapper--manual'] : ['container', 'calculator-params__wrapper'];
+    let classes = this.isManualPage ? ['container', 'calculator-params__wrapper', 'calculator-params__wrapper--manual'] : ['container', 'calculator-params__wrapper'];
 
-    let content = CalculatorApp.manualPageFlag ? paramsTemplates.mainPage : paramsTemplates.clientPage;
+    let content = this.isManualPage ? paramsTemplates.mainPage : paramsTemplates.clientPage;
 
     this.calculatorParams.removeChild(calculatorParamsWrapper);
     const wrapper = document.createElement('div')
@@ -130,18 +142,18 @@ class CalculatorApp {
     return false;
   }
 
-  addFields(fieldsList, fieldSelect) {
+  addFields(fieldSelect) {
     fieldSelect.textContent = '';
-    fieldsList.forEach(elem => {
+    this.fieldsList.forEach(elem => {
       let option = document.createElement('option');
       option.textContent = elem.name;
       fieldSelect.appendChild(option);
     });
   }
 
-  fillArea(fieldsList, fieldSelect) {
+  fillArea(fieldSelect) {
     const areaInput = document.getElementById('field-area')
-    for (const elem of fieldsList) {
+    for (const elem of this.fieldsList) {
       if (fieldSelect.value === elem.name) {
         areaInput.value = elem.area;
         return;
@@ -158,13 +170,14 @@ class CalculatorApp {
 
 
   mainCalculate() {
-    const inputData = new InputData;
+    const inputData = new InputData(this);
     inputData.init();
     const outputData = new OutputData;
+    outputData.init();
+
     this.CalculateDoses(inputData, outputData);
-    this.CalculatePrice(inputData, outputData)
-    console.log(outputData);
-    outputData.FillResultTable(inputData, outputData)
+    this.CalculatePrice(inputData, outputData);
+    outputData.PrintResult(outputData);
   }
 
   CalculateDoses(inputData, outputData) {
@@ -184,20 +197,19 @@ class CalculatorApp {
       outputData[key].physWeightByGa = fertilizerValue <= 0 ? 0 :
         Math.round((dose * 100 / fertilizerValue * correction[key]) / 5) * 5;
 
-      outputData[key].physWeightByField = (outputData[key].physWeightByGa / 1000 * inputData.fieldArea).toFixed(1)
-
+      outputData[key].physWeightByField = Math.round(outputData[key].physWeightByGa / 1000 * inputData.fieldArea)
     });
   }
 
   CalculatePrice(inputData, outputData) {
-    ['nitrogen', 'phosphorus', 'potassium'].forEach(key => {
+    ELEMENTS.forEach(key => {
       outputData[key].priceByGa = Math.round(outputData[key].physWeightByGa * inputData.fertilizers[key].price);
       outputData[key].priceByField = outputData[key].priceByGa * inputData.fieldArea;
     })
 
     outputData.total.priceByGa = outputData.nitrogen.priceByGa + outputData.phosphorus.priceByGa + outputData.potassium.priceByGa
 
-    outputData.total.priceByWeight = outputData.nitrogen.priceByWeight + outputData.phosphorus.priceByWeight + outputData.potassium.priceByWeight
+    outputData.total.priceByField = outputData.nitrogen.priceByField + outputData.phosphorus.priceByField + outputData.potassium.priceByField
   }
 
   PaintTheCell(minLimit, maxLimit, element) {
@@ -224,7 +236,8 @@ class CalculatorApp {
 }
 
 class InputData {
-  constructor() {
+  constructor(calculatorApp) {
+    this.app = calculatorApp;
     // Основные параметры поля
     this.fieldName = '';
     this.fieldArea = '';
@@ -275,7 +288,7 @@ class InputData {
   }
 
   init() {
-    this.fieldName = CalculatorApp.manualPageFlag ? '' : getInputValueById('fields');
+    this.fieldName = this.app.isManualPage ? '' : getInputValueById('fields');
     this.fieldArea = getInputValueById('field-area');
     this.harvest = getInputValueById('harvest') * 0.7;
 
@@ -284,13 +297,13 @@ class InputData {
     /** Коэф. на агрохим. показатели поля */
     this.fertilityCoefficients = this.getFertilityCoefficients()
 
-    this.fertilizers = this.getFertilizers(['nitrogen', 'phosphorus', 'potassium']);
+    this.fertilizers = this.getFertilizers();
 
   }
 
-  getFertilizers(fertilizersArray) {
+  getFertilizers() {
     const fertilizers = {};
-    fertilizersArray.forEach(key => {
+    ELEMENTS.forEach(key => {
       const name = getInputValueById(key);
       fertilizers[key] = {
         name,
@@ -339,8 +352,9 @@ class InputData {
   }
 
   getFertilityValue() {
-    console.log('fieldsList', CalculatorApp.fieldsList);
-    if (CalculatorApp.manualPageFlag) {
+    console.log(this.app.isManualPage);
+
+    if (this.app.isManualPage) {
       return {
         nitrogen: getInputValueById('nitrogen-value'),
         phosphorus: getInputValueById('phosphorus-value'),
@@ -348,7 +362,7 @@ class InputData {
       }
     }
     else {
-      const field = CalculatorApp.fieldsList.find(f => this.fieldName === f.name);
+      const field = this.app.fieldsList.find(f => this.fieldName === f.name);
       if (field) {
         return {
           nitrogen: field.organic,
@@ -365,27 +379,37 @@ class InputData {
   }
 
   getFertilityCoefficients() {
-    const { nitrogen, phosphorus, potassium } = this.getFertilityValue(CalculatorApp.fieldsList)
-    let nitrogenCoefficient =
-      nitrogen < 2.9 ? 1
-        : nitrogen <= 6.2 ? 0.75
-          : 0.6;
+    const LIMITS = {
+      nitrogen: [
+        { max: 2.9, k: 1 },
+        { max: 6.2, k: 0.75 },
+        { max: Infinity, k: 0.6 }
+      ],
+      phosphorus: [
+        { max: 20, k: 1.3 },
+        { max: 25, k: 1.2 },
+        { max: 30, k: 1.1 },
+        { max: 35, k: 1.0 },
+        { max: 40, k: 0.9 },
+        { max: Infinity, k: 0.7 }],
+      potassium: [
+        { max: 6, k: 1.5 },
+        { max: 7.5, k: 1.1 },
+        { max: 9, k: 1.0 },
+        { max: 10.5, k: 0.9 },
+        { max: 12, k: 0.8 },
+        { max: Infinity, k: 0.7 }
+      ]
+    };
 
-    let phosphorusCoefficient =
-      phosphorus < 20 ? 1.3
-        : phosphorus < 25 ? 1.2
-          : phosphorus < 30 ? 1.1
-            : phosphorus < 35 ? 1
-              : phosphorus < 40 ? 0.9
-                : 0.7;
+    const { nitrogen, phosphorus, potassium } = this.getFertilityValue(this.app.fieldsList)
+    // Таблица диапазонов и коэффициентов
+    const getCoefficients = (value, table) =>
+      table.find(({ max }) => value < max)?.k ?? table.at(-1).k;
 
-    let potassiumCoefficient =
-      potassium < 6 ? 1.5
-        : potassium < 7.5 ? 1.1
-          : potassium < 9 ? 1.0
-            : potassium < 10.5 ? 0.9
-              : potassium < 12 ? 0.8
-                : 0.7;
+    const nitrogenCoefficient = getCoefficients(nitrogen, LIMITS.nitrogen);
+    const phosphorusCoefficient = getCoefficients(phosphorus, LIMITS.phosphorus);
+    const potassiumCoefficient = getCoefficients(potassium, LIMITS.potassium);
 
     console.log(
       `Коэффициенты:
@@ -397,10 +421,9 @@ class InputData {
     return {
       nitrogen: nitrogenCoefficient,
       phosphorus: phosphorusCoefficient,
-      potassium: potassiumCoefficient
+      potassium: potassiumCoefficient,
     };
   }
-
 }
 
 class OutputData {
@@ -448,13 +471,17 @@ class OutputData {
   }
 
   init() {
-    this.nitrogen = createElementSet('nitrogen');
-    this.phosphorus = createElementSet('phosphorus');
-    this.potassium = createElementSet('potassium');
+    this.nitrogen = this.createElementSet('nitrogen');
+    this.phosphorus = this.createElementSet('phosphorus');
+    this.potassium = this.createElementSet('potassium');
 
-    this.totalTableCells = {
-      priceByGa: document.getElementById('price-ga-total'),
-      priceByField: document.getElementById('price-field-total'),
+    this.total = {
+      priceByGa: '',
+      priceByField: '',
+      tableCells: {
+        priceByGa: document.getElementById('price-ga-total'),
+        priceByField: document.getElementById('price-field-total'),
+      }
     }
   }
 
@@ -473,45 +500,16 @@ class OutputData {
     }
   }
 
-  FillResultTable(inputData, outputData) {
-    ['nitrogen', 'phosphorus', 'potassium'].forEach(key => {
-      this[key].tableCells.physWeightByGa.textContent = outputData[key].physWeightByGa;
-      this[key].tableCells.physWeightByField.textContent = outputData[key].physWeightByField;
+  PrintResult() {
+    ELEMENTS.forEach(key => {
+      this[key].tableCells.physWeightByGa.textContent = this[key].physWeightByGa;
+      this[key].tableCells.physWeightByField.textContent = this[key].physWeightByField;
 
-      this[key].tableCells.priceByGa.textContent = `${outputData[key].priceByGa.toLocaleString('ru-RU')} ₽`;
-      this[key].tableCells.priceByField.textContent = `${outputData[key].priceByField.toLocaleString('ru-RU')} ₽`;
+      this[key].tableCells.priceByGa.textContent = `${this[key].priceByGa.toLocaleString('ru-RU')} ₽`;
+      this[key].tableCells.priceByField.textContent = `${this[key].priceByField.toLocaleString('ru-RU')} ₽`;
     })
-    this.total.priceByGa.textContent = `${outputData.total.priceByGa.toLocaleString('ru-RU')} ₽`;
-    this.total.priceByField.textContent = `${outputData.total.priceByField.toLocaleString('ru-RU')} ₽`;
-
-
-    // if (outputData.physWeightP > 0) {
-    //   document.getElementById('phys-ga-phosphorus').textContent = outputData.physWeightP;
-    //   document.getElementById('phys-field-phosphorus').textContent = (outputData.physWeightP / 1000 * inputData.fieldArea).toFixed(1);
-    // }
-    // if (outputData.physWeightK > 0) {
-    //   document.getElementById('phys-ga-potassium').textContent = outputData.physWeightK;
-    //   document.getElementById('phys-field-potassium').textContent = (outputData.physWeightK / 1000 * inputData.fieldArea).toFixed(1);
-    // }
-    // if (outputData.priceGaN > 0) {
-    //   document.getElementById('price-ga-nitrogen').textContent = `${outputData.priceGaN.toLocaleString('ru-RU')} ₽`;
-    //   document.getElementById('price-field-nitrogen').textContent = `${outputData.priceFieldN.toLocaleString('ru-RU')} ₽`;
-    // }
-    // if (outputData.priceGaP > 0) {
-    //   document.getElementById('price-ga-phosphorus').textContent = `${outputData.priceGaP.toLocaleString('ru-RU')} ₽`;
-    //   document.getElementById('price-field-phosphorus').textContent = `${outputData.priceFieldP.toLocaleString('ru-RU')} ₽`;
-    // }
-    // if (outputData.priceGaK > 0) {
-    //   document.getElementById('price-ga-potassium').textContent = `${outputData.priceGaK.toLocaleString('ru-RU')} ₽`;
-    //   document.getElementById('price-field-potassium').textContent = `${outputData.priceFieldK.toLocaleString('ru-RU')} ₽`;
-    // }
-
-    // if (outputData.priceGaN + outputData.priceGaP + outputData.priceGaK) {
-    //   document.getElementById('price-ga-total').textContent = `${(outputData.priceGaN + outputData.priceGaP + outputData.priceGaK).toLocaleString('ru-RU')} ₽`;
-    // }
-    // if (outputData.priceFieldN + outputData.priceFieldP + outputData.priceFieldK) {
-    //   document.getElementById('price-field-total').textContent = `${(outputData.priceFieldN + outputData.priceFieldP + outputData.priceFieldK).toLocaleString('ru-RU')} ₽`;
-    // }
+    this.total.tableCells.priceByGa.textContent = `${this.total.priceByGa.toLocaleString('ru-RU')} ₽`;
+    this.total.tableCells.priceByField.textContent = `${this.total.priceByField.toLocaleString('ru-RU')} ₽`;
   }
 }
 

@@ -2,6 +2,7 @@ import { marker, map } from './map.js';
 import JustValidate from 'just-validate';
 import Inputmask from "inputmask/dist/inputmask.es6.js";
 import { main, byPeriod } from './main.js';
+import { classMain } from "./class.js";
 
 const
   latitude = document.getElementById('latitude'),
@@ -134,4 +135,5 @@ validate
     // Запуск основной функции программы
     document.getElementById('loader').style.display = 'block';
     main();
+    classMain();
   })

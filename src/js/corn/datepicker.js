@@ -32,7 +32,7 @@ startDatePicker = new AirDatepicker('#start-date',
     // selectedDates: new Date('2024-01-01'),
     dateFormat: 'dd.MM.yyyy',
     minDate: new Date('2021-03-23'),
-    maxDate: new Date('2025-12-31'),
+    maxDate: new Date(),
     onSelect({ date }) {
       endDatePicker.update({
         minDate: date,

@@ -2,6 +2,7 @@ import { CalculateByPeriod } from './weather.js';
 import { CalculateByYear } from './forecast.js';
 import { PrintGraph } from './graph.js';
 
+
 export const
   baseTemp = parseFloat(document.getElementById('base-temp').value),
   chartObj = { chart: null };
@@ -16,6 +17,8 @@ Date.prototype.withoutTime = function () {
 
 export async function main() {
   const dateRangeData = GetDate(document.getElementById('start-date').value, document.getElementById('end-date').value);
+  console.log(`dateRangeData /n`, dateRangeData);
+
   try {
     if (!byPeriod.checked) {
       let totalData = await CalculateByYear(dateRangeData);
@@ -24,7 +27,6 @@ export async function main() {
         throw new Error('Не удалось произвести расчёт, попробуйте позже или измените параметры')
       PrintResult(totalData);
       document.getElementById('loader').style.display = 'none';
-
     }
     else {
       let totalData = await CalculateByPeriod(dateRangeData);

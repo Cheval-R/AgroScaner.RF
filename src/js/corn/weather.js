@@ -4,6 +4,8 @@ import { baseTemp } from './main.js';
 export async function CalculateByPeriod(data) {
   try {
     const weatherData = await GetWeather(data);
+    console.log('SIMPLE weatherData', weatherData);
+
     if (!weatherData) {
       throw new Error('Не удалось получить погодные данные. Попробуйте позже или измените параметры');
     }

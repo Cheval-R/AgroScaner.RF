@@ -1,4 +1,4 @@
-@import "./components/var";
-@import "./components/fonts";
-@import "./components/normalize";
-@import "./components/global";
+@forward "./components/var";
+@forward "./components/fonts";
+@forward "./components/normalize";
+@forward "./components/global";
