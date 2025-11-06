@@ -1,5 +1,5 @@
 import AirDatepicker from 'air-datepicker';
-import { byPeriod } from './main.js';
+import { byPeriod } from './main.ts';
 
 const
   yesterday = new Date(new Date().setDate(new Date().getDate() - 1)),

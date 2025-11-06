@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "noEmit": true,
+    "allowImportingTsExtensions": true,
+    "target": "ES6", // компилировать в ES6
+    "module": "ESNext", // ES-модули
+    "outDir": "docs/js", // Gulp потом перезапишет
+    "rootDir": "src/js", // исходники
+    "strict": true, // строгая типизация
+    "noImplicitAny": false, // на первых порах можно отключить строгие any
+    "sourceMap": true, // чтобы можно было отлаживать код
+    "esModuleInterop": true, // разрешает импорт модулей как в JS
+    "skipLibCheck": true // ускоряет сборку
+  },
+  "include": [
+    "src/js/**/*.ts"
+  ],
+  "exclude": [
+    "./node_modules"
+  ]
+}

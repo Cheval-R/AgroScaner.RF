@@ -1,4 +1,4 @@
-import { baseTemp } from './main.js';
+import { baseTemp } from './main.ts';
 
 
 export async function CalculateByPeriod(data) {

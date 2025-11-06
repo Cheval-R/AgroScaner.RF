@@ -1,6 +1,4 @@
 import { Crops, Fertilizers, Clients } from './data.js';
-// import { Fertilizers } from './fertilizer.js';
-// import { Clients } from './fields.js';
 import { paramsTemplates } from "./templates.js";
 
 
@@ -23,15 +21,23 @@ const CLIENTS_MAP = {
 };
 
 class CalculatorApp {
+  calculateButton: HTMLElement | null;
+  calculatorParams: HTMLElement | null;
+  clientNameElem: HTMLElement | null;
+  currentClient: HTMLElement | null;
+
+
+
+  isManualPage:boolean;
 
   constructor() {
-    this.calculateButton;
-    this.calculatorParams;
+    this.calculateButton = document.getElementById('calculate-button');
+    this.calculatorParams = document.getElementById('calculator-params');
 
     this.fieldsList;
 
-    this.clientNameElem;
-    this.currentClient;
+    this.clientNameElem = document.getElementById('client-name');
+    this.currentClient = document.getElementsByClassName('clients__button')[0];
 
     this.isManualPage = true;
   }
@@ -40,7 +46,7 @@ class CalculatorApp {
     this.calculateButton = document.getElementById('calculate-button');
     this.calculatorParams = document.getElementById('calculator-params');
     this.clientNameElem = document.getElementById('client-name');
-    this.currentClient = document.getElementsByClassName('clients__button')[0]
+    this.currentClient = document.getElementsByClassName('clients__button')[0];
   }
 
   bindEvents() {

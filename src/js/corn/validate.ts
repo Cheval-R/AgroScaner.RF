@@ -1,8 +1,8 @@
-import { marker, map } from './map.js';
+import { marker, map } from './map.ts';
 import JustValidate from 'just-validate';
 import Inputmask from "inputmask/dist/inputmask.es6.js";
-import { main, byPeriod } from './main.js';
-import { classMain } from "./class.js";
+import { main, byPeriod } from './main.ts';
+import { classMain } from "./class.ts";
 
 const
   latitude = document.getElementById('latitude'),

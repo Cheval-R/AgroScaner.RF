@@ -1,6 +1,6 @@
-// const { Chart } = await import('chart.js');
+// const { Chart } = await import('chart.ts');
 import Chart from 'chart.js/auto';
-import { chartObj } from './main.js';
+import { chartObj } from './main.ts';
 
 
 export function PrintGraph(data, todayIndex) {

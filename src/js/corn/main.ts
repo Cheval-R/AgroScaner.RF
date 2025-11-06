@@ -1,6 +1,6 @@
-import { CalculateByPeriod } from './weather.js';
-import { CalculateByYear } from './forecast.js';
-import { PrintGraph } from './graph.js';
+import { CalculateByPeriod } from './weather.ts';
+import { CalculateByYear } from './forecast.ts';
+import { PrintGraph } from './graph.ts';
 
 
 export const
