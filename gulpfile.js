@@ -49,19 +49,19 @@ const path = {
     html: 'src/*.html',
     scss: {
       intro: './src/scss/blocks/intro-styles.scss',
-      corn: './src/scss/blocks/corn-harvesting.scss',
+      // corn: './src/scss/blocks/corn-harvesting.scss',
       calculator: './src/scss/blocks/calculator.scss',
     },
     js: {
-      corn: [
-        './src/js/corn/main.ts',
-        './src/js/corn/map.ts',
-        './src/js/corn/datepicker.ts',
-        './src/js/corn/weather.ts',
-        './src/js/corn/validate.ts',
-        './src/js/corn/forecast.ts',
-        './src/js/corn/graph.ts',
-      ],
+      /*       corn: [
+              './src/js/corn/main.ts',
+              './src/js/corn/map.ts',
+              './src/js/corn/datepicker.ts',
+              './src/js/corn/weather.ts',
+              './src/js/corn/validate.ts',
+              './src/js/corn/forecast.ts',
+              './src/js/corn/graph.ts',
+            ], */
       calculator: [
         './src/js/calculator/data.ts',
         './src/js/calculator/templates.ts',
@@ -127,15 +127,12 @@ export const scss = () => {
 };
 
 // ===== JS + TypeScript =====
+// ===== JS + TypeScript через Webpack + Babel =====
 export const js = () => {
-  const tasks = Object.entries(path.src.js).map(([name, files]) => {
-    // 🔹 создаём отдельный tsProject для каждой группы файлов
-    const tsProject = gulpTs.createProject('tsconfig.json');
-
-    return gulp
+  const tasks = Object.entries(path.src.js).map(([name, files]) =>
+    gulp
       .src(files, { allowEmpty: true })
       .pipe(plumber(plumberNotify(`JS/TS: ${name}`)))
-      .pipe(gulpif(files.some((f) => f.endsWith('.ts')), tsProject())) // ✅ теперь каждая сборка использует свой экземпляр
       .pipe(
         webpackStream(
           {
@@ -145,18 +142,23 @@ export const js = () => {
             module: {
               rules: [
                 {
-                  test: /\.[tj]s$/,
+                  test: /\.[jt]s$/,
                   exclude: /node_modules/,
                   use: {
                     loader: 'babel-loader',
                     options: {
-                      presets: ['@babel/preset-env', '@babel/preset-typescript'],
+                      presets: [
+                        '@babel/preset-env',
+                        '@babel/preset-typescript'
+                      ],
                     },
                   },
                 },
               ],
             },
-            resolve: { extensions: ['.ts', '.js'] },
+            resolve: {
+              extensions: ['.ts', '.js'],
+            },
           },
           webpack
         )
@@ -164,8 +166,8 @@ export const js = () => {
       .pipe(gulpif(!dev, terser()))
       .pipe(rename({ suffix: '.min' }))
       .pipe(gulp.dest(path.docs.js))
-      .pipe(browserSync.stream());
-  });
+      .pipe(browserSync.stream())
+  );
 
   return Promise.all(tasks);
 };

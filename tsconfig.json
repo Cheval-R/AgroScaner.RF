@@ -13,7 +13,8 @@
     "skipLibCheck": true // ускоряет сборку
   },
   "include": [
-    "src/js/**/*.ts"
+    "src/js/**/*.ts",
+    "src/js/calculator/calc12ulato123r.js"
   ],
   "exclude": [
     "./node_modules"
