@@ -247,72 +247,241 @@ class CalculatorApp {
   }
 }
 
-interface Crop {
-  name: string,
-  nitrogen: number,
-  phosphorus: number,
-  potassium: number,
-};
+
 
 interface NPK {
+  name?: string;
   nitrogen: number;
   phosphorus: number;
   potassium: number;
 }
 
+interface NPKS {
+  nitrogen: number;
+  phosphorus: number;
+  potassium: number;
+  sulfur: number;
+}
+
+type FertilizerKey = 'nitrogen' | 'phosphorus' | 'potassium'
+
+
 interface Fertilizer {
-  name: undefined,
-  price: undefined,
-  nitrogen: undefined,
-  phosphorus: undefined,
-  potassium: undefined,
-  sulfur: undefined,
+  name: string,
+  price: number,
+  nitrogen: number,
+  phosphorus: number,
+  potassium: number,
+  sulfur: number,
 }
 
 class InputData {
   app: CalculatorApp;
   // Основные параметры поля
   fieldName: string;
-  fieldArea: string;
-  harvest: string;
+  fieldArea: number;
+  harvest: number;
 
   // Информация о выбранной культуре
-  crop: Crop;
+  crop: NPK;
 
   // Коэффициенты по агрохимическим показателям поля
   fertilityCoefficients: NPK;
 
   // Удобрения
-  fertilizers = {
+  fertilizers: Record<FertilizerKey, Fertilizer> = {
     nitrogen: {
-      name: undefined,
-      price: undefined,
-      nitrogen: undefined,
-      phosphorus: undefined,
-      potassium: undefined,
-      sulfur: undefined,
+      name: '',
+      price: 0,
+      nitrogen: 0,
+      phosphorus: 0,
+      potassium: 0,
+      sulfur: 0,
     },
     phosphorus: {
-      name: undefined,
-      price: undefined,
-      nitrogen: undefined,
-      phosphorus: undefined,
-      potassium: undefined,
-      sulfur: undefined,
+      name: '',
+      price: 0,
+      nitrogen: 0,
+      phosphorus: 0,
+      potassium: 0,
+      sulfur: 0,
     },
     potassium: {
-      name: undefined,
-      price: undefined,
-      nitrogen: undefined,
-      phosphorus: undefined,
-      potassium: undefined,
-      sulfur: undefined,
+      name: '',
+      price: 0,
+      nitrogen: 0,
+      phosphorus: 0,
+      potassium: 0,
+      sulfur: 0,
     }
   };
   constructor(calculatorApp) {
     this.app = calculatorApp;
+
+    this.fieldName = '';
+    this.fieldArea = 0;
+    this.harvest = 0;
+
+    this.crop = {
+      name: '',
+      nitrogen: 0,
+      phosphorus: 0,
+      potassium: 0,
+    }
+
+    this.fertilityCoefficients = {
+      nitrogen: 0,
+      phosphorus: 0,
+      potassium: 0,
+    }
   }
 
+  init() {
+    this.fieldName = this.app.isManualPage ? '' : getInputValueById('fields');
+    this.fieldArea = getInputValueAsNumberById('field-area');
+    this.harvest = getInputValueAsNumberById('harvest') * 0.7;
+
+    this.crop = this.getCrop('crop');
+
+    /** Коэф. на агрохим. показатели поля */
+    this.fertilityCoefficients = this.getFertilityCoefficients()
+
+    this.fertilizers = this.getFertilizers();
+  }
+
+  getFertilizers() {
+    let fertilizers: Record<FertilizerKey, Fertilizer> = {} as Record<FertilizerKey, Fertilizer>;
+    ELEMENTS.forEach(key => {
+      const name = getInputValueById(key);
+
+      fertilizers[key] = {
+        name,
+        price: getInputValueById(`${key}-price`),
+        ...this.fertilizerCatch(name)
+      }
+    })
+    return fertilizers;
+  }
+
+  fertilizerCatch(name: string): NPKS {
+    const fertilizer = Fertilizers.find(f => f.name === name)
+    if (fertilizer) {
+      return {
+        nitrogen: fertilizer.nitrogen,
+        phosphorus: fertilizer.phosphorus,
+        potassium: fertilizer.potassium,
+        sulfur: fertilizer.sulfur,
+      }
+    }
+    // ! Придумать обработку
+    return {
+      nitrogen: 0,
+      phosphorus: 0,
+      potassium: 0,
+      sulfur: 0,
+    }
+  }
+
+  getCrop(id: string): NPK {
+    const value = getInputValueById(id);
+    const crop = Crops.find(c => c.name === value);
+    if (crop) {
+      return {
+        name: value,
+        nitrogen: crop.nitrogen,
+        phosphorus: crop.phosphorus,
+        potassium: crop.potassium,
+      }
+    }
+    // ! Придумать обработку
+    else return {
+      name: '',
+      nitrogen: 0,
+      phosphorus: 0,
+      potassium: 0,
+    }
+  }
+
+  getFertilityCoefficients() {
+    const LIMITS = {
+      nitrogen: [
+        { max: 2.9, k: 1 },
+        { max: 6.2, k: 0.75 },
+        { max: Infinity, k: 0.6 }
+      ],
+      phosphorus: [
+        { max: 20, k: 1.3 },
+        { max: 25, k: 1.2 },
+        { max: 30, k: 1.1 },
+        { max: 35, k: 1.0 },
+        { max: 40, k: 0.9 },
+        { max: Infinity, k: 0.7 }],
+      potassium: [
+        { max: 6, k: 1.5 },
+        { max: 7.5, k: 1.1 },
+        { max: 9, k: 1.0 },
+        { max: 10.5, k: 0.9 },
+        { max: 12, k: 0.8 },
+        { max: Infinity, k: 0.7 }
+      ]
+    };
+
+    const { nitrogen, phosphorus, potassium } = this.getFertilityValue()
+    // Таблица диапазонов и коэффициентов
+    const getCoefficients = (value: number, table: { max: number, k: number }[]) => {
+      const lastElement = table.at(-1)?.k;
+      const row = table.find(({ max }) => value < max);
+      if (row !== undefined) {
+        return row.k
+      }
+      return lastElement ?? 0;
+    }
+
+    const nitrogenCoefficient = getCoefficients(nitrogen, LIMITS.nitrogen);
+    const phosphorusCoefficient = getCoefficients(phosphorus, LIMITS.phosphorus);
+    const potassiumCoefficient = getCoefficients(potassium, LIMITS.potassium);
+
+    console.log(
+      `Коэффициенты:
+		Азот: ${nitrogenCoefficient}
+		Фосфор: ${phosphorusCoefficient}
+		Калий: ${potassiumCoefficient}`
+    );
+
+    return {
+      nitrogen: nitrogenCoefficient,
+      phosphorus: phosphorusCoefficient,
+      potassium: potassiumCoefficient,
+    };
+  }
+
+  getFertilityValue(): NPK {
+    console.log(this.app.isManualPage);
+
+    if (this.app.isManualPage) {
+      return {
+        nitrogen: getInputValueAsNumberById('nitrogen-value'),
+        phosphorus: getInputValueAsNumberById('phosphorus-value'),
+        potassium: getInputValueAsNumberById('potassium-value'),
+      }
+    }
+    else {
+      const field = this.app.fieldsList.find(f => this.fieldName === f.name);
+      if (field) {
+        return {
+          nitrogen: field.organic,
+          phosphorus: field.phosphorus,
+          potassium: field.potassium,
+        }
+      }
+    }
+    // ! Придумать обработку
+    return {
+      nitrogen: 0,
+      phosphorus: 0,
+      potassium: 0,
+    }
+  }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -320,3 +489,22 @@ document.addEventListener('DOMContentLoaded', () => {
   console.log(app);
   app.bindEvents();
 });
+
+
+function getInputValueById(id: string): string {
+  const input = document.getElementById(id);
+
+  if (!(input instanceof HTMLInputElement)) {
+    throw new Error(`Элемент с id ${id} не найден`);
+  }
+  return input.value;
+
+}
+function getInputValueAsNumberById(id: string): number {
+  const input = document.getElementById(id);
+
+  if (input instanceof HTMLInputElement && input.type === 'number')
+    return input.valueAsNumber;
+
+  throw new Error(`Элемент с id ${id} не найден`);
+}
