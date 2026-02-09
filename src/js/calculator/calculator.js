@@ -19,6 +19,8 @@ const CLIENTS_MAP = {
   "ооо «дуслык»": Clients.duslyk,
   "ооо «аняк»": Clients.anyak,
   "ооо «туган як»": Clients.tuganYak,
+  "ао «аф «старомаинская»": Clients.staromainskaya,
+  "кфх «абдуллин»": Clients.abdullin,
 };
 
 class CalculatorApp {

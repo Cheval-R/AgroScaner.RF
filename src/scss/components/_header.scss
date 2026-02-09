@@ -2,46 +2,6 @@
 
 .header {
   margin-bottom: 28px;
-
-  &__wrapper {
-    display: grid;
-    grid-template-columns: repeat(3, auto);
-    justify-content: space-around;
-    align-items: center;
-    column-gap: 15px;
-    padding: 14px 18px;
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.82));
-    border-radius: 16px;
-    border: 1px solid rgba(15, 23, 42, 0.08);
-    box-shadow: 0 16px 38px rgba(15, 23, 42, 0.12);
-    backdrop-filter: blur(10px);
-
-    &--no-nav {
-      grid-template-columns: repeat(2, auto);
-    }
-
-    @media (max-width: 1000px) {
-      justify-content: space-evenly;
-      grid-template-areas:
-        "tahs lab"
-        "nav nav";
-      grid-template-columns: repeat(2, auto);
-      grid-template-rows: repeat(2, auto);
-    }
-    @media (max-width: 650px) {
-      &--no-nav {
-        grid-template-rows: repeat(2, auto);
-        grid-template-columns: 1fr;
-        grid-template-areas: "tahs" "lab";
-        justify-content: center;
-        gap: 25px;
-
-        & img {
-          margin: 0 auto;
-        }
-      }
-    }
-  }
 }
 
 .nav {
@@ -49,34 +9,50 @@
   flex-basis: 50%;
 
   padding: 6px;
+
+
+
   @media (max-width: 1000px) {
     grid-area: nav;
   }
+
   &__list {
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 15px;
 
+
+
     @media (max-width: 850px) {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
       justify-content: space-evenly;
     }
+
+    @media (max-width: 460px) {
+      &--no-nav {
+        grid-template-columns: 1fr;
+      }
+    }
+
     @media (max-width: 350px) {
       gap: 5px;
     }
   }
+
   &__item {
     line-height: 1.5;
     font-size: clamp(12px, 1.8vw, 20px);
     font-weight: 500;
     color: #0f172a;
+
     @media (max-width: 850px) {
       height: 100%;
       font-size: clamp(12px, 2.8vw, 20px);
     }
   }
+
   &__link {
     height: 100%;
     display: flex;
@@ -93,25 +69,38 @@
       box-shadow 0.2s ease,
       border-color 0.2s ease,
       transform 0.2s ease;
-    &:hover {
-      color: #0f172a;
-      background: rgba(255, 255, 255, 0.95);
-      border-color: rgba(34, 197, 94, 0.35);
-      box-shadow: 0 10px 18px rgba(15, 23, 42, 0.12);
-      transform: translateY(-1px);
+
+    @media (hover: hover) {
+
+      &:hover {
+        color: #0f172a;
+        background: rgba(255, 255, 255, 0.95);
+        border-color: rgba(34, 197, 94, 0.35);
+        box-shadow: 0 10px 18px rgba(15, 23, 42, 0.12);
+        transform: translateY(-1px);
+      }
     }
+
     &:focus-visible {
       outline: none;
       border-color: rgba(34, 197, 94, 0.7);
       box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.2);
     }
   }
+
   &__img {
+    display: block;
+    width: auto;
+    height: 40px;
     max-width: unset;
+
     @media (max-width: 700px) {
+      height: 34px;
       max-width: 100%;
     }
+
     @media (max-width: 350px) {
+      height: 30px;
       max-width: 125px;
     }
   }

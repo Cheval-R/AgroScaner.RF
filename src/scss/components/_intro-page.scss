@@ -5,25 +5,41 @@
     font-size: 30px;
     font-weight: 700;
     margin-bottom: 20px;
+    color: #25252d;
+  }
+
+  &__text {
+    max-width: 640px;
+    margin: 0 auto 18px;
+    color: #4e4f4f;
+    font-size: 18px;
+    line-height: 1.5;
+
+    @media (max-width: 600px) {
+      font-size: 16px;
+    }
   }
 }
 
 .page-link {
-  display: block;
+  display: flex;
+  width: max-content;
   max-width: 300px;
-  padding: 15px;
+  padding: 14px 16px;
   margin: 10px;
 
   font-size: 20px;
   font-weight: 700;
   text-align: center;
   text-decoration: none;
-  // background-color: #12683b;
-  color: white;
-  border-radius: 10px;
-  transition: 0.3s;
-  border-radius: 10px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  background: linear-gradient(135deg, #12683b, #1f7a46);
+  color: #ffffff;
+  border-radius: 999px;
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+  box-shadow: 0 10px 20px rgba(18, 104, 59, 0.25);
+  min-height: 74px;
+  align-items: center;
+  justify-content: center;
 
   @media (max-width: 650px) {
     font-size: 18px;
@@ -32,16 +48,19 @@
 
 @media (hover: hover) {
   .page-link:hover {
-    background-color: #0f572e;
+    box-shadow: 0 16px 28px rgba(18, 104, 59, 0.32);
+    transform: translateY(-1px);
   }
 }
-.page-link__secondary {
-  background-color: #ee4621;
+
+.button--orange.page-link {
+  background: linear-gradient(135deg, #ee4621, #d64422);
+  box-shadow: 0 10px 20px rgba(238, 70, 33, 0.24);
 }
 
 @media (hover: hover) {
-  .page-link__secondary:hover {
-    background-color: #c63a1b;
+  .button--orange.page-link:hover {
+    box-shadow: 0 10px 18px rgba(238, 70, 33, 0.26);
   }
 }
 
@@ -54,13 +73,47 @@
 
 .links-wrapper {
   display: flex;
+  // gap: 10px;
   // flex-direction: column;
   align-items: center;
   justify-content: center;
   margin-bottom: 15px;
   flex-wrap: wrap;
 
-  background: rgba(255, 255, 255, 0.8);
-  border-radius: 10px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  background: transparent;
+  border-radius: 0;
+  border: none;
+  box-shadow: none;
+  padding: 0;
+
+  @media (max-width: 1000px) {
+    flex-direction: column;
+    gap: 30px;
+  }
+}
+
+.header__wrapper {
+  border-radius: 999px;
+  padding: 12px 20px;
+}
+
+.logo__link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  background: rgba(255, 255, 255, 0.7);
+  box-shadow: inset 0 0 0 1px rgba(15, 23, 42, 0.06);
+}
+
+.logo__image {
+  height: 56px;
+  width: auto;
+  max-width: 100%;
+
+  @media (max-width: 700px) {
+    height: 44px;
+  }
 }
