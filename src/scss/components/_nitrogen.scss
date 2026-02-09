@@ -1,0 +1,190 @@
+@use "./var";
+
+.page-title {
+  text-align: center;
+}
+
+.required-star,
+.optional-sign {
+  font-size: 16px;
+  font-weight: 700;
+  position: relative;
+
+  cursor: pointer;
+
+  &::after {
+    font-size: 12px;
+    color: #334155;
+    font-weight: 400;
+
+    background-color: rgb(255, 255, 255);
+
+    box-shadow: 0 18px 45px rgba(17, 24, 39, 0.12);
+    border-radius: 5px;
+    padding: 5px 8px;
+    width: max-content;
+
+    position: absolute;
+
+    bottom: 100%;
+    left: 50%;
+  }
+
+  &:hover::after {
+    display: inline;
+  }
+}
+
+.required-star {
+  color: red;
+
+  &::after {
+    content: " - обязательное поле для расчёта дозы внесения";
+    display: none;
+  }
+}
+
+.optional-sign {
+  color: #ffc400;
+
+  &::after {
+    content: " - обязательное поле для расчета стоимости";
+    display: none;
+  }
+}
+
+.nitrogen {
+  &__wrapper {
+    padding: 40px;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(255, 255, 255, 0.86));
+    border-radius: 16px;
+    box-shadow: 0 18px 45px rgba(17, 24, 39, 0.12);
+    border: 1px solid rgba(15, 23, 42, 0.08);
+  }
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+    // display: grid;
+    // grid-template-columns: repeat(3, minmax(220px, 1fr));
+    gap: 50px;
+    // align-items: start;
+    // justify-content: start;
+  }
+
+  &__group {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    width: 100%;
+    gap: 25px;
+    align-items: center;
+
+    & legend {
+      margin-bottom: 5px;
+      font-weight: 700;
+    }
+  }
+
+  &__label {
+    font-size: 13px;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    color: #334155;
+    margin: 0;
+  }
+
+  &__control {
+    width: 100%;
+    padding: 12px 12px;
+    border-radius: 10px;
+    border: 1px solid rgba(15, 23, 42, 0.16);
+    background: #ffffff;
+    color: #0f172a;
+    font-size: 16px;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+    height: var.$input-height;
+  }
+
+  &__control:focus {
+    outline: none;
+    border-color: #0ea5e9;
+    box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.2);
+  }
+
+  &__select {
+    appearance: none;
+    background-image:
+      linear-gradient(45deg, transparent 50%, #0f172a 50%),
+      linear-gradient(135deg, #0f172a 50%, transparent 50%),
+      linear-gradient(to right, transparent, transparent);
+    background-position:
+      calc(100% - 20px) calc(50% + 1px),
+      calc(100% - 14px) calc(50% + 1px),
+      0 0;
+    background-size:
+      6px 6px,
+      6px 6px,
+      100% 100%;
+    background-repeat: no-repeat;
+    padding-right: 38px;
+  }
+
+  &__actions {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    grid-column: 1 / -1;
+    margin-top: 6px;
+  }
+
+  &__button {
+    padding: 12px 22px;
+    border-radius: 999px;
+    border: none;
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: 600;
+    background: linear-gradient(135deg, #16a34a, #22c55e);
+    box-shadow: 0 10px 20px rgba(34, 197, 94, 0.3);
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  &__button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 16px 28px rgba(34, 197, 94, 0.32);
+  }
+
+  &__button:active {
+    transform: translateY(0);
+    box-shadow: 0 8px 16px rgba(34, 197, 94, 0.24);
+  }
+
+  &__result {
+    margin-top: 16px;
+    padding: 12px 14px;
+    background: rgba(14, 165, 233, 0.08);
+    border-radius: 12px;
+    color: #0f172a;
+    font-weight: 600;
+  }
+
+
+
+  @media (max-width: 800px) {
+    &__wrapper {
+      padding: 20px;
+    }
+
+    &__group {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+    }
+  }
+
+  @media (max-width: 550px) {
+    &__group {
+      grid-template-columns: 1fr;
+    }
+  }
+}

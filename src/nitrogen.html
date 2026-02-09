@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="ru">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="shortcut icon" type="image/png" href="./img/favicon.png" />
+  <title>Калькулятор расчёта доз азотной подкормки</title>
+
+  <link rel="stylesheet" href="./css/nitrogen.min.css" />
+  <script type="module" src="./js/nitrogen.min.js"></script>
+</head>
+
+<body>
+  <header class="header">
+    <div class="container">
+      <nav class="nav">
+        <ul class="nav__list">
+          <li class="nav__item">
+            <a class="nav__link" href="https://tatagrohimservis.ru/"><img class="nav__img" src="./img/logo-tahs.png" alt="" /></a>
+          </li>
+          <li class="nav__item button button--orange">
+            <a class="nav__link" href="./calculator.html">Расчёт дозы мин. удобрений</a>
+          </li>
+          <li class="nav__item button">
+            <a class="nav__link" href="./corn-harvesting.html">Расчёт сроков уборки силоса</a>
+          </li>
+          <li class="nav__item">
+            <a class="nav__link" href="https://xn--80aaijxtepff.xn--p1ai/"><img class="nav__img" src="./img/logo-lab.png" alt="" /></a>
+          </li>
+        </ul>
+        <!-- <h1 class="page__title">Калькулятор расчёта доз и стоимости удобрений</h1> -->
+      </nav>
+    </div>
+  </header>
+  <main class="main">
+    <h1 class="page-title">Калькулятор доз внесения азотной подкормки</h1>
+    <section class="nitrogen container">
+      <div class="nitrogen__wrapper">
+        <form id="nitrogen-form" class="nitrogen__form">
+          <fieldset class="nitrogen__group">
+            <legend>Параметры поля</legend>
+            <label class="nitrogen__field" for="depth">
+              <span class="nitrogen__label">Глубина отбора <span class="required-star">*</span></span>
+              <select class="nitrogen__control nitrogen__select" name="depth" id="depth" required>
+                <option value="20" selected>
+                  0 - 20
+                </option>
+                <option value="40">0 - 40</option>
+                <option value="60">0 - 60</option>
+              </select>
+            </label>
+            <label class="nitrogen__field" for="tech">
+              <span class="nitrogen__label">Технология возделывания <span class="required-star">*</span></span>
+              <select class="nitrogen__control nitrogen__select" name="tech" id="tech" required>
+                <option value="intensive">Интенсивная</option>
+                <option value="simple">Обычная</option>
+                <option value="extensive">Экстенсивная</option>
+              </select>
+            </label>
+            <label for="nitrogen__field" for="area">
+              <span class="nitrogen__label">Площадь поля <span class="optional-sign">!</span></span>
+              <input class="nitrogen__control nitrogen__input" type="number" id="area" name="area" />
+            </label>
+            <label class="nitrogen__field" for="nitro">
+              <span class="nitrogen__label">Содержание N-NO3, мг/кг (PPM) <span class="required-star">*</span></span>
+              <input class="nitrogen__control nitrogen__input" name="nitro" id="nitro" type="number" required />
+            </label>
+          </fieldset>
+          <fieldset class="nitrogen__group">
+            <legend>Климатические параметры</legend>
+            <label class="nitrogen__field" for="zone">
+              <span class="nitrogen__label">Климатическая зона <span class="required-star">*</span></span>
+              <select class="nitrogen__control nitrogen__select" name="zone" id="zone" required>
+                <option value="taiga">Тайга</option>
+                <option value="forestSteppe" selected>
+                  Лесостепь
+                </option>
+                <option value="steppe">Степь</option>
+              </select>
+            </label>
+          </fieldset>
+          <fieldset class="nitrogen__group">
+            <legend>Параметры культуры</legend>
+            <label class="nitrogen__field" for="crop">
+              <span class="nitrogen__label">Тип культуры <span class="required-star">*</span></span>
+              <select class="nitrogen__control nitrogen__select" name="crop" id="crop" required>
+                <option value="cereals">Зерновые</option>
+                <option value="row">Пропашные</option>
+                <option value="herbs">Травы</option>
+              </select>
+            </label>
+            <label class="nitrogen__field" for="plants">
+              <span class="nitrogen__label">Число растений на 1 га (для зерновых) <span class="optional-sign">!</span></span>
+              <input class="nitrogen__control nitrogen__input" type="number" id="plants" name="plants" value="0">
+            </label>
+          </fieldset>
+          <fieldset class="nitrogen__group">
+            <legend>Параметры удобрения (опционально)</legend>
+            <label class="nitrogen__field" for="fertilizer">
+              <span class="nitrogen__label">Удобрение <span class="optional-sign">!</span></span>
+              <select class="nitrogen__control nitrogen__select" name="fertilizer" id="fertilizer">
+                <option value="none" selected>Без удобрения</option>
+                <option value="ammoniumNitrate">Аммиачная селитра</option>
+                <option value="urea">Мочевина</option>
+                <option value="ammoniumSulfate">Аммоний сернокислый</option>
+              </select>
+            </label>
+            <label class="nitrogen__field" for="nitrogen-value">
+              <span class="nitrogen__label">Азота в удобрении, % <span class="optional-sign">!</span></span>
+              <input class="nitrogen__control nitrogen__input" type="number" id="nitrogen-value" name="nitrogen-value" value="0">
+            </label>
+            <label class="nitrogen__field" for="price">
+              <span class="nitrogen__label">Цена, руб/т (по ум. цена КАХС) <span class="optional-sign">!</span></span>
+              <input class="nitrogen__control nitrogen__input" id="price" type="number">
+            </label>
+          </fieldset>
+          <div class="nitrogen__actions">
+            <button class="nitrogen__button" type="submit" id="calculate-button">
+              Расчёт
+            </button>
+          </div>
+        </form>
+        <p id="result" class="nitrogen__result visually-hidden"></p>
+      </div>
+    </section>
+  </main>
+</body>
+
+</html>

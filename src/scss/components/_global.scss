@@ -32,7 +32,7 @@ body {
 	-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 	-webkit-tap-highlight-color: transparent;
 	color: #25252d;
-	background-color: #fdf0e9;
+	background-color: #f3f6fa; // cool gray
 	font-size: 16px;
 	// line-height: 2;
 	font-weight: 400;
@@ -129,37 +129,41 @@ iframe {
 
 // ! UI (Перенести в отдельный файл)
 
-.button {
-	color: white;
-	padding: 0 5px;
-	line-height: 2;
-	// margin: 5px;
-	border: 1px solid #ccc;
-	border-radius: 5px;
+// .button {
+// 	color: white;
+// 	padding: 0 5px;
+// 	line-height: 2;
+// 	// margin: 5px;
+// 	border: 1px solid #ccc;
+// 	border-radius: 5px;
 
-	outline-offset: 3px;
-	outline: 2px solid #00000000;
-	background-color: #12683b;
-	transition:
-		background-color 0.3s ease-in,
-		outline-color 0.3s ease-in,
-		transform 0.1s ease-in;
+// 	outline-offset: 3px;
+// 	outline: 2px solid #00000000;
+// 	background-color: #12683b;
+// 	transition:
+// 		background-color 0.3s ease-in,
+// 		outline-color 0.3s ease-in,
+// 		transform 0.1s ease-in;
 
-	@media (hover: hover) {
-		&:hover {
-			background-color: #ee4621;
-			&:focus-visible {
-				outline-color: #ee4621;
-			}
-		}
-	}
-	&:focus-visible {
-		outline-color: #12683b;
-	}
-	&:active {
-		transform: translateY(2px);
-	}
-	&--orange {
-		background-color: #ee4621;
-	}
-}
+// 	@media (hover: hover) {
+// 		&:hover {
+// 			background-color: #ee4621;
+
+// 			&:focus-visible {
+// 				outline-color: #ee4621;
+// 			}
+// 		}
+// 	}
+
+// 	&:focus-visible {
+// 		outline-color: #12683b;
+// 	}
+
+// 	&:active {
+// 		transform: translateY(2px);
+// 	}
+
+// 	&--orange {
+// 		background-color: #ee4621;
+// 	}
+// }

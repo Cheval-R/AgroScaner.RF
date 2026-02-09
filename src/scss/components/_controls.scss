@@ -1,0 +1,34 @@
+@use "./var";
+// input {
+//   padding: 10px;
+//   // margin: 5px;
+//   border: 1px solid #ccc;
+//   border-radius: 5px;
+// }
+
+// select {
+//   padding: 10px;
+//   padding-right: 20px;
+//   // margin: 5px;
+//   border: 1px solid #ccc;
+//   border-radius: 5px;
+// }
+
+
+.input-error {
+  position: relative;
+
+  input {
+    border-color: red;
+  }
+
+  &::before {
+    position: absolute;
+    // top: 10px;
+    content: "Введите корректное значение";
+    color: red;
+    font-size: 12px;
+    margin-top: 5px;
+    top: calc(var.$input-height + 15px);
+  }
+}
