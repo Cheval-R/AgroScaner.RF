@@ -37,8 +37,15 @@ export async function main() {
     }
   } catch (error) {
     console.error('Ошибка:', error);
-    document.getElementById('temperature-sum').textContent =
-      'Ошибка. Не удалось рассчитать эффективную температуру. Попробуйте изменить параметры.';
+    const output = document.getElementById('output');
+    const outputToday = document.getElementById('output__today');
+    const outputOptimal = document.getElementById('output__optimal');
+    if (output) output.style.display = 'block';
+    if (outputToday) {
+      outputToday.textContent =
+        'Ошибка. Не удалось рассчитать эффективную температуру. Попробуйте изменить параметры.';
+    }
+    if (outputOptimal) outputOptimal.textContent = '';
     return null;
   }
 }
@@ -104,12 +111,17 @@ function GetPluralValues(count, rules) {
 
 export function PrintResult(data) {
   const clearData = RemoveRepeatingGroups(data, 5);
+  if (clearData.date.length === 0 || clearData.temp.length === 0) {
+    const output = document.getElementById('output');
+    const outputToday = document.getElementById('output__today');
+    const outputOptimal = document.getElementById('output__optimal');
+    if (output) output.style.display = 'block';
+    if (outputToday) outputToday.textContent = 'Недостаточно данных для расчёта.';
+    if (outputOptimal) outputOptimal.textContent = '';
+    return;
+  }
   const todayDate = getFormattedToday();
-  let todayIndex;
-  if (CompareDates(clearData.date.at(-1), todayDate) <= 0)
-    todayIndex = clearData.date.length - 1;
-  else
-    todayIndex = clearData.date.findIndex((element) => element === todayDate);
+  const todayIndex = getIndexAtOrBeforeDate(clearData.date, todayDate);
 
   // console.log('clearData.date.length - 1', clearData.date.length - 1);
   // console.log('clearData.date', clearData.date);
@@ -141,37 +153,49 @@ function CompareDates(date1, date2) {
   return 0;
 }
 
-function RemoveRepeatingGroups(data, limit = 10) {
-  let { temp, date } = DeleteZeroFromStart(data);
-  const tempLengthAfterZero = temp.length;
-
-  while (true) {
-    let lastValue = temp[temp.length - 1];
-    let count = 0;
-    let i = temp.length - 1;
-
-    while (i >= 0 && temp[i] === lastValue) {
-      count++;
-      i--;
-    }
-
-    if (count > limit) {
-      temp = temp.filter(value => value !== lastValue);
+function getIndexAtOrBeforeDate(dates, targetDate) {
+  if (!dates.length) return -1;
+  if (CompareDates(targetDate, dates[0]) < 0) return -1;
+  if (CompareDates(targetDate, dates[dates.length - 1]) > 0) return -1;
+  let index = -1;
+  for (let i = 0; i < dates.length; i++) {
+    if (CompareDates(dates[i], targetDate) <= 0) {
+      index = i;
     } else {
       break;
     }
   }
+  return index === -1 ? dates.length - 1 : index;
+}
 
-  let differenceDays = tempLengthAfterZero - temp.length;
-  date = date.slice(0, date.length - differenceDays);
+function RemoveRepeatingGroups(data, limit = 10) {
+  let { temp, date } = DeleteZeroFromStart(data);
+  if (temp.length === 0) {
+    return { ...data, temp, date };
+  }
+
+  const lastValue = temp[temp.length - 1];
+  let i = temp.length - 1;
+  while (i >= 0 && temp[i] === lastValue) {
+    i--;
+  }
+  const repeatCount = temp.length - 1 - i;
+  if (repeatCount > limit) {
+    const newLength = temp.length - (repeatCount - limit);
+    temp = temp.slice(0, newLength);
+    date = date.slice(0, newLength);
+  }
 
   return { ...data, temp, date };
 }
 
 function DeleteZeroFromStart(data) {
-  let temp = data.temp.filter(item => item !== 0);
-  let differenceDays = data.temp.length - temp.length;
-  let date = data.date.slice(differenceDays);
+  let startIndex = 0;
+  while (startIndex < data.temp.length && data.temp[startIndex] === 0) {
+    startIndex++;
+  }
+  const temp = data.temp.slice(startIndex);
+  const date = data.date.slice(startIndex);
   return { temp, date }
 }
 
@@ -183,9 +207,17 @@ function PrintEffectiveTemp(totalData, optimalHarvestingTiming, todayIndex) {
   document.getElementById('output').style.display = 'block';
   // console.log('totalData.temp[todayIndex]', totalData.temp);
 
+  if (todayIndex < 0 || totalData?.temp?.[todayIndex] == null) {
+    const outputToday = document.getElementById('output__today');
+    if (outputToday) {
+      outputToday.textContent =
+        'Данных на сегодняшний день нет для выбранного периода.';
+    }
+  } else {
   document.getElementById('output__today').innerHTML =
     `
     ${introWord} <u>${totalData.date[0]}</u> до <u> ${totalData.date[todayIndex]}</u> за ${GetPluralValues(totalData.date.length, ["день", "дня", "дней"])} накопится <b>${totalData.temp[todayIndex].toFixed(0)}°C</b> эффективных температур.`;
+  }
   /*   if (totalData?.temp?.[todayIndex] != null) {
       document.getElementById('output__today').innerHTML = `
       На сегодняшний день накоплено: <b>${totalData.temp[todayIndex]}°C</b>`

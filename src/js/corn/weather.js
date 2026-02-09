@@ -13,10 +13,17 @@ export async function CalculateByPeriod(data) {
 
     return CalculateSumEffectiveTemp(weatherData);
   }
-  catch {
+  catch (error) {
     console.error('Ошибка:', error);
-    document.getElementById('temperature-sum').textContent =
-      'Ошибка. Не удалось рассчитать эффективную температуру. Попробуйте изменить параметры.';
+    const output = document.getElementById('output');
+    const outputToday = document.getElementById('output__today');
+    const outputOptimal = document.getElementById('output__optimal');
+    if (output) output.style.display = 'block';
+    if (outputToday) {
+      outputToday.textContent =
+        'Ошибка. Не удалось рассчитать эффективную температуру. Попробуйте изменить параметры.';
+    }
+    if (outputOptimal) outputOptimal.textContent = '';
     return null;
   }
 }
@@ -49,9 +56,15 @@ export async function GetWeather(DATAdate) {
   }
   catch (error) {
     console.error('Error:', error);
-    document.getElementById('temperature-sum').textContent =
-      `Ошибка. Не удалось рассчитать эффективную температуру. 
-    Попробуйте изменить параметры`;
+    const output = document.getElementById('output');
+    const outputToday = document.getElementById('output__today');
+    const outputOptimal = document.getElementById('output__optimal');
+    if (output) output.style.display = 'block';
+    if (outputToday) {
+      outputToday.textContent =
+        'Ошибка. Не удалось рассчитать эффективную температуру. Попробуйте изменить параметры.';
+    }
+    if (outputOptimal) outputOptimal.textContent = '';
     return null;
   }
 }
