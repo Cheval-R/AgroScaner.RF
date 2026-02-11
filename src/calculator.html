@@ -14,15 +14,27 @@
 <body>
   <header class="header">
     <div class="container">
-      <nav class="nav">
-        <ul class="nav__list">
-          <li class="nav__item"><a class="nav__link" href="https://tatagrohimservis.ru/"><img class="nav__img" src="./img/logo-tahs.png" alt=""></a></li>
-          <li class="nav__item button button--orange"><a class="nav__link" href="./nitrogen.html">Расчёт дозы азотной подкормки</a></li>
-          <li class="nav__item button"><a class="nav__link" href="./corn-harvesting.html">Расчёт сроков уборки силоса</a></li>
-          <li class="nav__item"><a class="nav__link" href="./index.html"><img class="nav__img" src="./img/logo-lab.png" alt=""></a></li>
-        </ul>
-        <!-- <h1 class="page__title">Калькулятор расчёта доз и стоимости удобрений</h1> -->
-      </nav>
+      <div class="header__bar">
+        <a class="header__logo" href="https://tatagrohimservis.ru/">
+          <img class="header__logo-image" src="./img/logo-tahs.png" alt="Логотип" />
+        </a>
+        <nav class="nav header__nav">
+          <ul class="nav__list">
+            <li class="nav__item button button--orange">
+              <a class="nav__link" href="./calculator.html">Расчёт дозы мин. удобрений</a>
+            </li>
+            <li class="nav__item button">
+              <a class="nav__link" href="./corn-harvesting.html">Расчёт сроков уборки силоса</a>
+            </li>
+            <li class="nav__item button">
+              <a class="nav__link" href="./nitrogen.html">Расчёт доз азотной подкормки</a>
+            </li>
+          </ul>
+        </nav>
+        <a class="header__logo header__logo--lab" href="https://агросканер.рф">
+          <img class="header__logo-image" src="./img/logo-lab.png" alt="Логотип" />
+        </a>
+      </div>
     </div>
   </header>
   <main class="main">
