@@ -79,7 +79,6 @@ input{width:100%;min-width:0;text-align:center}
 input[type=number]:focus{-moz-appearance:number-input}
 input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
 .marker-class{position:relative;transform:translate(-50%,-100%);content:"";display:block;background-image:url(../img/pin.svg);width:20px;height:32px}
-.ymaps3x0--map{width:auto!important;height:auto!important}
 .base-temp{position:relative;display:grid;width:100%}
 .base-temp input{width:100%;min-width:0}
 .base-temp span{position:relative;text-underline-offset:4px;-webkit-text-decoration:underline dotted;text-decoration:underline dotted;cursor:help;display:inline-block;width:-moz-fit-content;width:fit-content}
